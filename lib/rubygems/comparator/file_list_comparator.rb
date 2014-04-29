@@ -10,7 +10,7 @@ class Gem::Comparator
 
     def compare(packages, report, options = {})
       check_diff_command_is_installed
-      
+
       unpacked_gem_dirs = {}
 
       # Check file lists from older versions to newer
@@ -32,11 +32,11 @@ class Gem::Comparator
           end
 
           if pkg.spec.respond_to? :"#{param}"
-        	  current = pkg.spec.send(:"#{param}")
-        	else
-        	  warn "#{pkg.spec.full_name} does not respond to #{param}, skipping check"
-        	  next
-        	end
+            current = pkg.spec.send(:"#{param}")
+          else
+            warn "#{pkg.spec.full_name} does not respond to #{param}, skipping check"
+            next
+          end
 
           if previous == current && !all_same
             report[param] << "#{Rainbow(packages[index].spec.version).blue}: No change"
@@ -97,8 +97,8 @@ class Gem::Comparator
 
               # Check shebangs
               fl = {} # save first lines
-	            [prev_file, curr_file].each do |file|
-	              begin
+              [prev_file, curr_file].each do |file|
+                begin
                   fl[file.to_s] = File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
                 rescue
                   info "#{file} is binary, skipping shebang check."
@@ -124,11 +124,11 @@ class Gem::Comparator
                 report[param][vers]['changed'] << "#{file} changed: #{Rainbow(line_changes.count('+')).green}/#{Rainbow(line_changes.count('-')).red}"
               end
 
-        	    [permissions_changes, executable_changes, shebangs_changes].each do |changes|
-        	      unless changes.empty?
+              [permissions_changes, executable_changes, shebangs_changes].each do |changes|
+                unless changes.empty?
                   report[param][vers]['changed'] << changes
-        	      end
-        	    end
+                end
+              end
             end
           end
         end

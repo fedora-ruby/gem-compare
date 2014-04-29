@@ -101,10 +101,10 @@ class Gem::Comparator
         # Supported operator and version?
         if OPERATORS.include?(op) && v =~ VERSION_REGEX
           dep = Gem::Dependency.new gem_name, version
-      	  specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
-      	  specs_and_sources.each do |s|
-      	    expanded << s[0].version
-      	  end
+          specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
+          specs_and_sources.each do |s|
+            expanded << s[0].version
+          end
         else
           warn "Unsupported version specification: #{version}, skipping."
         end
