@@ -47,10 +47,8 @@ class Gem::Comparator
     # Expand versions (<=, >=, ~>) and sort them
     versions = expand_versions(gem_name, versions)
 
-    if versions.size == 1
-      warn 'Only one version specified, no version to compare to. Specify at lease two versions.'
-      exit 1
-    end
+    error 'Only one version specified. Specify at lease two versions.' \
+      if versions.size == 1
 
     versions.each do |version|
       download_gems? ? download_package(gem_name, version) : download_specification(gem_name, version)
