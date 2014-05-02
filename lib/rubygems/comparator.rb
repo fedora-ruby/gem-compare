@@ -28,8 +28,7 @@ class Gem::Comparator
       unless ((SPEC_PARAMS.include? options[:param]) ||
               (SPEC_FILES_PARAMS.include? options[:param]) ||
               (DEPENDENCY_PARAMS.include? "#{options[:param]}".to_sym))
-        warn('Invalid parameter.')
-        exit 1
+        error 'Invalid parameter.'
       end
     end
 
@@ -138,7 +137,7 @@ class Gem::Comparator
       dep = Gem::Dependency.new gem_name, version
       specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
       spec, source = specs_and_sources.max_by { |s,| s.version }
-      raise "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
+      error "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
       gem_specs["#{gem_file}"] = spec
 
       [spec, source]

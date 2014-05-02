@@ -23,12 +23,17 @@ class Gem::Comparator
 
     private
 
+      def info(msg)
+        say msg if Gem.configuration.really_verbose
+      end
+
       def warn(msg)
         say Rainbow("WARNING: #{msg}").red
       end
 
-      def info(msg)
-        say msg if Gem.configuration.really_verbose
+      def error(msg)
+        say Rainbow("ERROR: #{msg}").red
+        exit 1
       end
 
       def check_diff_command_is_installed
