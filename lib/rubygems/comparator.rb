@@ -38,7 +38,6 @@ class Gem::Comparator
     end
 
     @options = options
-    @output = {}
 
     # Results from the comparison
     @report = Gem::Comparator::Report.new
