@@ -102,6 +102,8 @@ class Gem::Comparator
         Gem::Version.new v
       end.sort.map(&:to_s)
 
+      error 'No versions found.' if versions.size == 0
+
       info "Versions: #{versions}"
       versions
     end
