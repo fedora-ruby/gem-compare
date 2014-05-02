@@ -22,9 +22,9 @@ class Gem::Comparator
 
         # Are values the same?
         if values.count(values[0]) == values.size
-          report[param] << "#{SUCCESS} #{param} field is the same" if options[:log_all]
+          report[param] << "#{SUCCESS} #{param}" if options[:log_all]
         else
-          report[param].set_header "#{FAIL} #{param} field differs:"
+          report[param].set_header "#{FAIL} #{param}:"
           values.each_with_index do |value, index|
             report[param] << "#{Rainbow(specs[index].version).blue}: #{value}"
           end

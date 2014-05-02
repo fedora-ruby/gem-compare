@@ -49,7 +49,7 @@ class Gem::Comparator
             same = current - added
 
             if !added.empty? || !deleted.empty?
-              report[param].set_header "#{FAIL} #{param} differ:"
+              report[param].set_header "#{FAIL} #{param}:"
               all_same = false
             end
 
@@ -134,7 +134,7 @@ class Gem::Comparator
           end
         end
 
-        report[param] << "#{SUCCESS} #{param} is the same" if all_same && options[:log_all]
+        report[param] << "#{SUCCESS} #{param}" if all_same && options[:log_all]
       end
       report
     end
