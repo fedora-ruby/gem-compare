@@ -57,6 +57,8 @@ class Gem::Comparator
       download_gems? ? download_package(gem_name, version) : download_specification(gem_name, version)
     end
 
+    @report.set_header "Compared versions: #{versions}"
+
     [SpecComparator, FileListComparator, DependencyComparator].each do |c|
       comparator = c.new
       cmp = comparator.is_a?(FileListComparator) ? gem_packages.values : gem_specs.values
