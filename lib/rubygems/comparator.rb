@@ -24,12 +24,8 @@ class Gem::Comparator
       options[:output] = Dir.mktmpdir
     end
 
-    if options[:param]
-      unless ((SPEC_PARAMS.include? options[:param]) ||
-              (SPEC_FILES_PARAMS.include? options[:param]) ||
-              (DEPENDENCY_PARAMS.include? "#{options[:param]}".to_sym))
-        error 'Invalid parameter.'
-      end
+    if options[:param] && !param_exists?(options[:param])
+      error 'Invalid parameter.'
     end
 
     if options[:no_color]

@@ -23,6 +23,12 @@ class Gem::Comparator
 
     private
 
+      def param_exists?(param)
+        (SPEC_PARAMS.include? param) ||
+        (SPEC_FILES_PARAMS.include? param) ||
+        (DEPENDENCY_PARAMS.include? "#{param}".to_sym)
+      end
+
       def info(msg)
         say msg if Gem.configuration.really_verbose
       end
