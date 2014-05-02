@@ -126,7 +126,7 @@ class Gem::Comparator
 
       package = Gem::Package.new File.join(@options[:output], gem_file)
       gem_packages["#{gem_file}"] = package
-      puts "#{gem_file} downloaded."
+      info "#{gem_file} downloaded."
 
       package
     end
