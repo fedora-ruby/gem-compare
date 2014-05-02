@@ -11,8 +11,9 @@ class Gem::Comparator
       info 'Checking dependencies...'
 
       filter_params(DEPENDENCY_PARAMS, options[:param]).each do |param|
+        all_same = true
         type = param.gsub('_dependency', '').to_sym
-        report[param].set_header "#{FAIL} #{type} dependencies:"
+
         specs.each_with_index do |s, index|
           next if index == 0
 
@@ -36,6 +37,10 @@ class Gem::Comparator
             end
           end
 
+          if (!deleted.empty? || !added.empty? || !updated.empty?)
+            all_same = false
+          end
+
           ver = "#{specs[index-1].version}->#{specs[index].version}"
 
           report[param][ver].section do
@@ -56,6 +61,11 @@ class Gem::Comparator
               puts updated unless updated.empty?
             end
           end
+        end
+        if all_same
+          report[param] << "#{SUCCESS} #{type} dependencies" if options[:log_all]
+        else
+          report[param].set_header "#{FAIL} #{type} dependencies:"
         end
       end
       report
