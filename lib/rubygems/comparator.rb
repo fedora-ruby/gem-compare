@@ -118,7 +118,7 @@ class Gem::Comparator
         return package
       end
 
-      spec = download_specification(gem_name, version)
+      spec, source = download_specification(gem_name, version)
 
       Dir.chdir @options[:output] do
         source.download spec
@@ -141,7 +141,7 @@ class Gem::Comparator
       raise "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
       gem_specs["#{gem_file}"] = spec
 
-      spec
+      [spec, source]
     end
 
     def download_gems?
