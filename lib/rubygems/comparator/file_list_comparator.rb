@@ -138,20 +138,5 @@ class Gem::Comparator
       report
     end
 
-    private
-
-      def extract_gem(package, target_dir)
-        gem_dir = File.join(target_dir, File.basename(package.spec.full_name, '.gem'))
-
-        # Cache
-        if Dir.exists? gem_dir
-          info "Unpacked gem version exists, using #{gem_dir}."
-          return gem_dir
-        end
-        info "Unpacking gem '#{package.spec.full_name}' in " + gem_dir
-        package.extract_files gem_dir
-        gem_dir
-      end
-
   end
 end
