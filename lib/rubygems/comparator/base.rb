@@ -19,14 +19,14 @@ class Gem::Comparator
                       required_ruby_version required_rubygems_version requirements
                       signing_key has_rdoc date version ].sort
     SPEC_FILES_PARAMS = %w[ files test_files extra_rdoc_files ]
-    DEPENDENCY_PARAMS = [ :runtime, :development ]
+    DEPENDENCY_PARAMS = %w[ runtime_dependency development_dependency ]
 
     private
 
       def param_exists?(param)
         (SPEC_PARAMS.include? param) ||
         (SPEC_FILES_PARAMS.include? param) ||
-        (DEPENDENCY_PARAMS.include? "#{param}".to_sym)
+        (DEPENDENCY_PARAMS.include? param)
       end
 
       def filter_params(params, param)

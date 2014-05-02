@@ -10,9 +10,9 @@ class Gem::Comparator
     def compare(specs, report, options = {})
       info 'Checking dependencies...'
 
-      filter_params(DEPENDENCY_PARAMS, options[:param]).each do |type|
-        cat = "#{type}_dependency".to_s
-        report[cat].set_header "[ #{FAIL} ] #{type} dependencies differ:"
+      filter_params(DEPENDENCY_PARAMS, options[:param]).each do |param|
+        type = options[:param].gsub('_dependency', '').to_sym
+        report[param].set_header "[ #{FAIL} ] #{type} dependencies differ:"
         specs.each_with_index do |s, index|
           next if index == 0
 
@@ -38,7 +38,7 @@ class Gem::Comparator
 
           ver = "#{specs[index-1].version}->#{specs[index].version}"
 
-          report[cat][ver].section do
+          report[param][ver].section do
             set_header "#{Rainbow(specs[index-1].version).blue}->#{Rainbow(s.version).blue}: "
 
             nest('deleted').section do
