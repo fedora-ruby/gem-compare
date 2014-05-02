@@ -10,7 +10,7 @@ class Gem::Comparator
     def compare(specs, report, options = {})
       info 'Checking dependencies...'
 
-      dependency_params(options[:param]).each do |type|
+      filter_params(DEPENDENCY_PARAMS, options[:param]).each do |type|
         cat = "#{type}_dependency".to_s
         report[cat].set_header "[ #{FAIL} ] #{type} dependencies differ:"
         specs.each_with_index do |s, index|
@@ -60,20 +60,6 @@ class Gem::Comparator
       end
       report
     end
-
-    private
-
-      def dependency_params(param)
-        if param
-          if DEPENDENCY_PARAMS.include? param.to_sym
-            return [param.to_sym]
-          else
-            return []
-          end
-        end
-
-        DEPENDENCY_PARAMS
-      end
 
   end
 end

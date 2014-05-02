@@ -14,7 +14,7 @@ class Gem::Comparator
       unpacked_gem_dirs = {}
 
       # Check file lists from older versions to newer
-      spec_files_params(options[:param]).each do |param|
+      filter_params(SPEC_FILES_PARAMS, options[:param]).each do |param|
         all_same = true
 
         packages.each_with_index do |pkg, index|
@@ -151,19 +151,6 @@ class Gem::Comparator
         info "Unpacking gem '#{package.spec.full_name}' in " + gem_dir
         package.extract_files gem_dir
         gem_dir
-      end
-
-      def spec_files_params(param)
-        if param
-
-          if SPEC_FILES_PARAMS.include? param
-            return [param]
-          else
-            return []
-          end
-        end
-
-        SPEC_FILES_PARAMS
       end
 
   end

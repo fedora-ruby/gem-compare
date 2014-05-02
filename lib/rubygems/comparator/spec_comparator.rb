@@ -10,7 +10,7 @@ class Gem::Comparator
     def compare(specs, report, options = {})
       info 'Checking spec parameters...'
 
-      spec_params(options[:param]).each do |param|
+      filter_params(SPEC_PARAMS, options[:param]).each do |param|
         values = []
         specs.each do |s|
           if s.respond_to? :"#{param}"
@@ -32,20 +32,6 @@ class Gem::Comparator
       end
       report
     end
-
-    private
-
-      def spec_params(param)
-        if param
-          if SPEC_PARAMS.include? param
-            return [param]
-          else
-            return []
-          end
-        end
-
-        SPEC_PARAMS
-      end
 
   end
 end

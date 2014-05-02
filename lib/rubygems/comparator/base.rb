@@ -29,6 +29,18 @@ class Gem::Comparator
         (DEPENDENCY_PARAMS.include? "#{param}".to_sym)
       end
 
+      def filter_params(params, param)
+        if param
+          if params.include? param
+            return [param]
+          else
+            return []
+          end
+        end
+
+        params
+      end
+
       def info(msg)
         say msg if Gem.configuration.really_verbose
       end
