@@ -11,7 +11,7 @@ class Gem::Comparator
       info 'Checking dependencies...'
 
       filter_params(DEPENDENCY_PARAMS, options[:param]).each do |param|
-        type = options[:param].gsub('_dependency', '').to_sym
+        type = param.gsub('_dependency', '').to_sym
         report[param].set_header "[ #{FAIL} ] #{type} dependencies differ:"
         specs.each_with_index do |s, index|
           next if index == 0
