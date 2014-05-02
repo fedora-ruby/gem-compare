@@ -14,6 +14,8 @@ class Gem::Comparator
   include Gem::Comparator::Base
   attr_accessor :options, :report
 
+  VERSION = '0.0.1'
+
   ##
   # Set the working dir and process options
   #
@@ -44,6 +46,7 @@ class Gem::Comparator
   # Compares file lists, requirements, other meta data
 
   def compare_versions(gem_name, versions)
+    info "gem-compare in #{VERSION}"
     # Expand versions (<=, >=, ~>) and sort them
     versions = expand_versions(gem_name, versions)
 
@@ -92,7 +95,13 @@ class Gem::Comparator
           warn "Unsupported version specification: #{version}, skipping."
         end
       end
-      expanded.uniq.map{ |v| Gem::Version.new v }.sort.map(&:to_s)
+
+      versions = expanded.uniq.map do |v|
+        Gem::Version.new v
+      end.sort.map(&:to_s)
+
+      info "Versions: #{versions}"
+      versions
     end
 
     def gem_file_name(gem_name, version)

@@ -9,6 +9,7 @@ class Gem::Comparator
     # Compares file lists in spec
 
     def compare(packages, report, options = {})
+      info 'Checking file lists...'
       check_diff_command_is_installed
 
       unpacked_gem_dirs = {}
