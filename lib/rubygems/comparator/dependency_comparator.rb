@@ -12,7 +12,7 @@ class Gem::Comparator
 
       filter_params(DEPENDENCY_PARAMS, options[:param]).each do |param|
         type = param.gsub('_dependency', '').to_sym
-        report[param].set_header "[ #{FAIL} ] #{type} dependencies differ:"
+        report[param].set_header "#{FAIL} #{type} dependencies differ:"
         specs.each_with_index do |s, index|
           next if index == 0
 
