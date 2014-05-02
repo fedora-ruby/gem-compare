@@ -7,17 +7,17 @@ class Gem::Comparator
     ##
     # Compares dependencies in spec
 
-    def compare(packages, report, options = {})
+    def compare(specs, report, options = {})
       info 'Checking dependencies...'
 
       dependency_params(options[:param]).each do |type|
         cat = "#{type}_dependency".to_s
         report[cat].set_header "[ #{FAIL} ] #{type} dependencies differ:"
-        packages.each_with_index do |pkg, index|
+        specs.each_with_index do |s, index|
           next if index == 0
 
-          prev_dependencies = packages[index-1].spec.dependencies.keep_if { |d| d.type == type }
-          curr_dependencies = packages[index].spec.dependencies.keep_if { |d| d.type == type }
+          prev_dependencies = specs[index-1].dependencies.keep_if { |d| d.type == type }
+          curr_dependencies = specs[index].dependencies.keep_if { |d| d.type == type }
 
           added = curr_dependencies - prev_dependencies
           deleted = prev_dependencies - curr_dependencies
@@ -36,10 +36,10 @@ class Gem::Comparator
             end
           end
 
-          ver = "#{packages[index-1].spec.version}->#{packages[index].spec.version}"
+          ver = "#{specs[index-1].version}->#{specs[index].version}"
 
           report[cat][ver].section do
-            set_header "#{Rainbow(packages[index-1].spec.version).blue}->#{Rainbow(pkg.spec.version).blue}: "
+            set_header "#{Rainbow(specs[index-1].version).blue}->#{Rainbow(s.version).blue}: "
 
             nest('deleted').section do
               set_header '* Deleted:'

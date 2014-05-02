@@ -7,16 +7,16 @@ class Gem::Comparator
     ##
     # Compares common fields in spec
 
-    def compare(packages, report, options = {})
+    def compare(specs, report, options = {})
       info 'Checking spec parameters...'
 
       spec_params(options[:param]).each do |param|
         values = []
-        packages.each do |pkg|
-          if pkg.spec.respond_to? :"#{param}"
-            values << pkg.spec.send(:"#{param}")
+        specs.each do |s|
+          if s.respond_to? :"#{param}"
+            values << s.send(:"#{param}")
           else
-            warn "#{pkg.spec.full_name} does not respond to #{param}, skipping check"
+            warn "#{s.full_name} does not respond to #{param}, skipping check"
           end
         end
 
@@ -26,7 +26,7 @@ class Gem::Comparator
         else
           report[param].set_header "[ #{FAIL} ] #{param} field differs:"
           values.each_with_index do |value, index|
-            report[param] << "#{Rainbow(packages[index].spec.version).blue}: #{value}"
+            report[param] << "#{Rainbow(specs[index].version).blue}: #{value}"
           end
         end
       end

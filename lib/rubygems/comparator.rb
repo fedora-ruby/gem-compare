@@ -1,11 +1,3 @@
-#####
-# TODO:
-# - compare Gemfiles in detail
-# - specs from rubygems json api
-#   https://api.rubygems.org/quick/Marshal.4.8/json-1.5.5-java.gemspec.rz
-# - packagers brief mode
-#####
-
 require 'tmpdir'
 require 'rbconfig'
 require 'rainbow'
@@ -58,23 +50,22 @@ class Gem::Comparator
   # Compares file lists, requirements, other meta data
 
   def compare_versions(gem_name, versions)
-    packages = []
-
     # Expand versions (<=, >=, ~>) and sort them
     versions = expand_versions(gem_name, versions)
+
     if versions.size == 1
       warn 'Only one version specified, no version to compare to. Specify at lease two versions.'
       exit 1
     end
 
     versions.each do |version|
-      pkg = download_gem(gem_name, version)
-      packages << pkg
+      download_gems? ? download_package(gem_name, version) : download_specification(gem_name, version)
     end
 
     [SpecComparator, FileListComparator, DependencyComparator].each do |c|
       comparator = c.new
-      @report = comparator.compare(packages, @report, @options)
+      cmp = comparator.is_a?(FileListComparator) ? gem_packages.values : gem_specs.values
+      @report = comparator.compare(cmp, @report, @options)
     end
 
     # Clean up
@@ -116,35 +107,54 @@ class Gem::Comparator
      "#{gem_name}-#{version}.gem"
     end
 
-    def download_gem(gem_name, version)
+    def download_package(gem_name, version)
       gem_file = gem_file_name(gem_name, version)
+      return gem_packages["#{gem_file}"] if gem_packages["#{gem_file}"]
 
-      # Cache
       if File.exists? File.join(@options[:output], gem_file)
         info "#{gem_file} exists, using already downloaded file."
-
         package = Gem::Package.new File.join(@options[:output], gem_file)
+        gem_packages["#{gem_file}"] = package
+
         return package
       end
 
-      dep = Gem::Dependency.new gem_name, version
-      specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
-      spec, source = specs_and_sources.max_by { |s,| s.version }
-
-      raise "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
+      spec = download_specification(gem_name, version)
 
       Dir.chdir @options[:output] do
         source.download spec
       end
 
       package = Gem::Package.new File.join(@options[:output], gem_file)
+      gem_packages["#{gem_file}"] = package
       puts "#{gem_file} downloaded."
 
       package
     end
 
+    def download_specification(gem_name, version)
+      gem_file = gem_file_name(gem_name, version)
+      return gem_specs["#{gem_file}"] if gem_specs["#{gem_file}"]
+
+      dep = Gem::Dependency.new gem_name, version
+      specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
+      spec, source = specs_and_sources.max_by { |s,| s.version }
+      raise "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
+      gem_specs["#{gem_file}"] = spec
+
+      spec
+    end
+
     def download_gems?
       options[:param] && SPEC_FILES_PARAMS.include?(options[:param])
+    end
+
+    def gem_packages
+      @gem_packages ||= {}
+    end
+
+    def gem_specs
+      @gem_specs ||= {}
     end
 
 end
