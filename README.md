@@ -72,6 +72,30 @@ Compared versions: ["4.0.0", "4.1.0"]
             minitest from: ["~> 4.2"] to: ["~> 5.1"]
 
 ```
+Or would you like to see all development dependencies for `prawn` since `0.1` version? That is possible too, *gem-compare* will expand the versions for you:
+
+```
+$ gem compare prawn '>=0.1' -k -a -p 'development_dependency'
+Compared versions: ["0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2", "0.2.3", "0.3.0", "0.4.0", "0.4.1", "0.5.0.1", "0.5.1", "0.6.1", "0.6.2", "0.6.3", "0.7.1", "0.7.2", "0.8.4", "0.11.1", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.14.0", "0.15.0", "1.0.0"]
+  DIFFERENT development dependencies:
+    0.12.0->0.13.0: 
+      * Added:
+            pdf-inspector ["~> 1.1.0"]
+            coderay ["~> 1.0.7"]
+            rdoc [">= 0"]
+    0.13.2->0.14.0: 
+      * Deleted:
+            rdoc [">= 0"]
+      * Added:
+            yard [">= 0"]
+            rspec [">= 0"]
+            mocha [">= 0"]
+            rake [">= 0"]
+    0.14.0->0.15.0: 
+      * Added:
+            simplecov [">= 0"]
+            pdf-reader ["~> 1.2"]
+```
 
 ### Supported options
 
@@ -80,6 +104,10 @@ Will be updated.
 ## Requirements
 
 Currently tested against RubyGems 2.x.
+
+## Contributions
+
+Contributions are welcome! Please send a PR and make sure you follow the coding style.
 
 ## Copyright
 
