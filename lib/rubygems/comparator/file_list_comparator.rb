@@ -42,13 +42,20 @@ class Gem::Comparator
             end
 
             vers = "#{packages[index-1].spec.version}->#{packages[index].spec.version}"
-            report[param][vers].set_header "#{Rainbow(packages[index-1].spec.version).blue}->#{Rainbow(packages[index].spec.version).blue}:"
 
-            report[param][vers]['deleted'].set_header '* Deleted:'
-            report[param][vers]['deleted'] << deleted unless deleted.empty?
+            report[param][vers].section do
+              set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
+                         "#{Rainbow(packages[index].spec.version).blue}:"
+              nest('deleted').section do
+                set_header '* Deleted:'
+                puts deleted unless deleted.empty?
+              end
 
-            report[param][vers]['added'].set_header '* Added:'
-            report[param][vers]['added'] << added unless added.empty?
+              nest('added').section do
+                set_header '* Added:'
+                puts added unless added.empty?
+              end
+            end
 
             report[param][vers]['changed'].set_header '* Changed:'
             report = check_same_files(param, vers, index, same, report)
