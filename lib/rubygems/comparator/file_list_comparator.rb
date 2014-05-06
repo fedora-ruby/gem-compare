@@ -12,7 +12,7 @@ class Gem::Comparator
       info 'Checking file lists...'
       check_diff_command_is_installed
 
-      unpacked_gem_dirs = {}
+      @packages = packages
 
       # Check file lists from older versions to newer
       filter_params(SPEC_FILES_PARAMS, options[:param]).each do |param|
@@ -51,26 +51,7 @@ class Gem::Comparator
             report[param][vers]['added'] << added unless added.empty?
 
             report[param][vers]['changed'].set_header '* Changed:'
-
-            same.each do |file|
-              prev_file = File.join(unpacked_gem_dirs[packages[index-1].spec.version], file)
-              curr_file = File.join(unpacked_gem_dirs[packages[index].spec.version], file)
-
-              line_changes = compact_files_diff(prev_file, curr_file)
-              permissions_changes = permission_changed(prev_file, curr_file)
-              executable_changes = executables_changed(prev_file, curr_file)
-              shebangs_changes = shebangs_changed(prev_file, curr_file)
-
-              if !line_changes.empty? || !permissions_changes.empty? || !executable_changes.empty? || !shebangs_changes.empty?
-                report[param][vers]['changed'] << "#{file} changed: #{Rainbow(line_changes.count('+')).green}/#{Rainbow(line_changes.count('-')).red}"
-              end
-
-              [permissions_changes, executable_changes, shebangs_changes].each do |changes|
-                unless changes.empty?
-                  report[param][vers]['changed'] << changes
-                end
-              end
-            end
+            report = check_same_files(param, vers, index, same, report)
           end
         end
 
@@ -80,6 +61,38 @@ class Gem::Comparator
     end
 
     private
+
+      def unpacked_gem_dirs
+        @unpacked_gem_dirs ||= {}
+      end
+
+      def check_same_files(param, vers, index, files, report)
+        files.each do |file|
+          prev_file = File.join(unpacked_gem_dirs[@packages[index-1].spec.version], file)
+          curr_file = File.join(unpacked_gem_dirs[@packages[index].spec.version], file)
+
+          line_changes = lines_changed(prev_file, curr_file)
+
+          changes = permission_changed(prev_file, curr_file),
+                    executables_changed(prev_file, curr_file),
+                    shebangs_changed(prev_file, curr_file)
+
+          if !line_changes.empty? || changes.any?
+            report[param][vers]['changed'] << \
+              "#{file} changed: #{line_changes}"
+          end
+
+          changes.each do |change|
+            report[param][vers]['changed'] << change unless change.empty?
+          end
+	end
+	report
+      end
+
+      def lines_changed(prev_file, curr_file)
+       line = compact_files_diff(prev_file, curr_file)
+       "#{Rainbow(line.count('+')).green}/#{Rainbow(line.count('-')).red}"
+      end
 
       def value_from_spec(param, spec)
         if spec.respond_to? :"#{param}"
