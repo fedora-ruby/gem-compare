@@ -56,46 +56,12 @@ class Gem::Comparator
               prev_file = File.join(unpacked_gem_dirs[packages[index-1].spec.version], file)
               curr_file = File.join(unpacked_gem_dirs[packages[index].spec.version], file)
 
-              line_changes, permissions_changes, executable_changes, shebangs_changes = '', '', '', ''
               line_changes = compact_files_diff(prev_file, curr_file)
               permissions_changes = permission_changed(prev_file, curr_file)
+              executable_changes = executables_changed(prev_file, curr_file)
+              shebangs_changes = shebangs_changed(prev_file, curr_file)
 
-              # Check executables
-              prev_executable = File.stat(prev_file).executable?
-              curr_executable = File.stat(curr_file).executable?
-
-              if !prev_executable && curr_executable
-                executable_changes << "#{FAIL} is now executable!"
-              elsif prev_executable && !curr_executable
-                executable_changes << "#{FAIL} is no longer executable!"
-              end
-
-              # Check shebangs
-              fl = {} # save first lines
-              [prev_file, curr_file].each do |file|
-                begin
-                  fl[file.to_s] = File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
-                rescue
-                  info "#{file} is binary, skipping shebang check."
-                ensure
-                  fl[file.to_s] = ''
-                end
-              end
-
-              unless fl[:prev_file] == fl[:curr_file]
-                prev_has_shebang = (fl[:prev_file] =~ SHEBANG_REGEX)
-                curr_has_shebang = (fl[:curr_file] =~ SHEBANG_REGEX)
-
-                if prev_has_shebang && !curr_has_shebang
-                  shebangs_changes << "#{FAIL} shebang probably lost: #{pfl}"
-                elsif !prev_has_shebang && curr_has_shebang
-                  shebangs_changes << "#{FAIL} shebang probably added: #{cfl}"
-                elsif prev_has_shebang && curr_has_shebang
-                  shebangs_changes << "#{FAIL} shebang probably changed: #{pfl} -> #{cfl}"
-                end
-              end
-
-              if !line_changes.empty? || !permissions_changes.empty? || !executable_changes || !shebangs_changes
+              if !line_changes.empty? || !permissions_changes.empty? || !executable_changes.empty? || !shebangs_changes.empty?
                 report[param][vers]['changed'] << "#{file} changed: #{Rainbow(line_changes.count('+')).green}/#{Rainbow(line_changes.count('-')).red}"
               end
 
@@ -159,12 +125,57 @@ class Gem::Comparator
         curr_permissions = file_permissions(curr_file)
 
         if prev_permissions != curr_permissions
-          "#{FAIL} permissions changed: " +
+          "#{FAIL} permissions: " +
           "#{prev_permissions} -> #{curr_permissions}"
         else
           ''
         end
       end
+
+      def executables_changed(prev_file, curr_file)
+        prev_executable = File.stat(prev_file).executable?
+        curr_executable = File.stat(curr_file).executable?
+
+        if !prev_executable && curr_executable
+          "#{FAIL} is now executable!"
+        elsif prev_executable && !curr_executable
+          "#{FAIL} is no longer executable!"
+        else
+          ''
+        end
+      end
+
+      def first_line(file)
+        begin
+          File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
+        rescue
+          info "#{file} is binary, skipping shebang check"
+	  ''
+        end
+      end
+
+      def shebangs_changed(prev_file, curr_file)
+        first_lines = {}
+        [prev_file, curr_file].each do |file|
+          first_lines[file] = first_line(file)
+        end
+
+        return '' if first_lines[prev_file] == first_lines[curr_file]
+
+        prev_has_shebang = (first_lines[prev_file] =~ SHEBANG_REGEX)
+        curr_has_shebang = (first_lines[curr_file] =~ SHEBANG_REGEX)
+
+        if prev_has_shebang && !curr_has_shebang
+            "#{FAIL} shebang probably lost: #{first_lines[prev_file]}"
+        elsif !prev_has_shebang && curr_has_shebang
+            "#{FAIL} shebang probably added: #{first_lines[curr_file]}"
+        elsif prev_has_shebang && curr_has_shebang
+            "#{FAIL} shebang probably changed: " +
+            "#{first_lines[prev_file]} -> #{first_lines[curr_file]}"
+        else
+            ''
+	end
+     end
 
   end
 end
