@@ -116,14 +116,8 @@ class Gem::Comparator
       gem_file = gem_file_name(gem_name, version)
       return gem_packages["#{gem_file}"] if gem_packages["#{gem_file}"]
 
-      if File.exists? File.join(@options[:output], gem_file)
-        info "#{gem_file} exists, using already downloaded file."
-        package = Gem::Package.new File.join(@options[:output], gem_file)
-        gem_packages["#{gem_file}"] = package
-        gem_specs["#{gem_file}"] = package.spec
-
-        return package
-      end
+      find_downloaded_gem(gem_file)
+      return gem_packages["#{gem_file}"] if gem_packages["#{gem_file}"]
 
       spec, source = download_specification(gem_name, version)
 
@@ -142,6 +136,9 @@ class Gem::Comparator
       gem_file = gem_file_name(gem_name, version)
       return gem_specs["#{gem_file}"] if gem_specs["#{gem_file}"]
 
+      find_downloaded_gem(gem_file)
+      return gem_specs["#{gem_file}"] if gem_specs["#{gem_file}"]
+
       dep = Gem::Dependency.new gem_name, version
       specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
       spec, source = specs_and_sources.max_by { |s,| s.version }
@@ -150,6 +147,19 @@ class Gem::Comparator
 
       [spec, source]
     end
+
+    def find_downloaded_gem(gem_file)
+      if File.exists? File.join(@options[:output], gem_file)
+        info "#{gem_file} exists, using already downloaded file."
+        package = Gem::Package.new File.join(@options[:output], gem_file)
+        gem_packages["#{gem_file}"] = package
+        gem_specs["#{gem_file}"] = package.spec
+        [package, package.spec]
+      else
+        [nil, nil]
+      end
+    end
+
 
     def download_gems?
       @options[:param] ? SPEC_FILES_PARAMS.include?(@options[:param]) : true
