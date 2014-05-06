@@ -17,25 +17,9 @@ class Gem::Comparator
         specs.each_with_index do |s, index|
           next if index == 0
 
-          prev_dependencies = specs[index-1].dependencies.keep_if { |d| d.type == type }
-          curr_dependencies = specs[index].dependencies.keep_if { |d| d.type == type }
-
-          added = curr_dependencies - prev_dependencies
-          deleted = prev_dependencies - curr_dependencies
-          updated = []
-
-          # Find updated dependencies
-          added.dup.each do |a_dep|
-            deleted.dup.each do |d_dep|
-              if a_dep.name == d_dep.name
-                unless a_dep.requirements_list == d_dep.requirements_list
-                  updated << "#{a_dep.name} from: #{d_dep.requirements_list} to: #{a_dep.requirements_list}"
-                end
-                added.delete a_dep
-                deleted.delete d_dep
-              end
-            end
-          end
+          prev_deps = specs[index-1].dependencies.keep_if { |d| d.type == type }
+          curr_deps = specs[index].dependencies.keep_if { |d| d.type == type }
+          added, deleted, updated = resolve_dependencies(prev_deps, curr_deps)
 
           if (!deleted.empty? || !added.empty? || !updated.empty?)
             all_same = false
@@ -70,6 +54,33 @@ class Gem::Comparator
       end
       report
     end
+
+    private
+
+      def resolve_dependencies(prev_deps, curr_deps)
+        added = curr_deps - prev_deps
+        deleted = prev_deps - curr_deps
+        split_dependencies(added, deleted)
+      end
+
+      def split_dependencies(added, deleted)
+        # Find updated dependencies
+        updated = []
+        added.dup.each do |ad|
+          deleted.dup.each do |dd|
+            if ad.name == dd.name
+              unless ad.requirements_list == dd.requirements_list
+                updated << "#{ad.name} " +
+			   "from: #{dd.requirements_list} " +
+		           "to: #{ad.requirements_list}"
+              end
+              added.delete ad
+              deleted.delete dd
+            end
+          end
+        end
+        [added, deleted, updated]
+      end
 
   end
 end
