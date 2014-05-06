@@ -57,14 +57,7 @@ class Gem::Comparator
               curr_file = File.join(unpacked_gem_dirs[packages[index].spec.version], file)
 
               line_changes, permissions_changes, executable_changes, shebangs_changes = '', '', '', ''
-
-              # Lines changed
-              Diffy::Diff.new(prev_file, curr_file, :source => 'files', :context => 0).each do |line|
-                case line
-                when /^\+/ then line_changes << Rainbow('+').green
-                when /^-/ then line_changes << Rainbow('-').red
-                end
-              end
+              line_changes = compact_files_diff(prev_file, curr_file)
 
               # Check permissions
               prev_permissions = sprintf("%o", File.stat(prev_file).mode)
@@ -137,6 +130,25 @@ class Gem::Comparator
                "#{param}, skipping check"
           nil
         end
+      end
+
+      ##
+      # Return changes between files
+      #
+      # + for line added
+      # - for line deleted
+
+      def compact_files_diff(prev_file, curr_file)
+        changes = ''
+        Diffy::Diff.new(
+	  prev_file, curr_file, :source => 'files', :context => 0
+	).each do |line|
+          case line
+          when /^\+/ then changes << Rainbow('+').green
+          when /^-/ then changes << Rainbow('-').red
+          end
+        end
+	changes
       end
 
   end
