@@ -3,26 +3,26 @@ require 'rubygems/comparator'
 
 class Gem::Commands::CompareCommand < Gem::Command
   def initialize
-    super 'compare', 'Compare gem\'s versions and generate a report of changes.',
+    super 'compare', 'Compare gem\'s versions and generate a report of changes',
       :output => Dir.pwd
 
-    add_option('-a', '--all', 'Show every comparison.') do
+    add_option('-a', '--all', 'Show every comparison') do
       options[:log_all] = true
     end
 
-    add_option('-k', '--keep-all', 'Keep downloaded and extracted gem files.') do
+    add_option('-k', '--keep-all', 'Keep downloaded and extracted gem files') do
       options[:keep_all] = true
     end
 
-    add_option('-n', '--no-color', 'Do not colorize output.') do
+    add_option('-n', '--no-color', 'Do not colorize output') do
       options[:no_color] = true
     end
 
-    add_option('-pPARAM', '--param=PARAM', 'Compare only a given paramater.') do |param, options|
+    add_option('-pPARAM', '--param=PARAM', 'Compare only a given paramater') do |param, options|
       options[:param] = param
     end
 
-    add_option('-b', '--brief', 'Include only important changes in the report.') do
+    add_option('-b', '--brief', 'Include only important changes in the report') do
       options[:log_all] = false
       options[:brief] = true
     end
