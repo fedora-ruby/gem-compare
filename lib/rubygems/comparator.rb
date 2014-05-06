@@ -120,6 +120,7 @@ class Gem::Comparator
         info "#{gem_file} exists, using already downloaded file."
         package = Gem::Package.new File.join(@options[:output], gem_file)
         gem_packages["#{gem_file}"] = package
+        gem_specs["#{gem_file}"] = package.spec
 
         return package
       end
