@@ -98,6 +98,7 @@ class Gem::Comparator
 
       def lines_changed(prev_file, curr_file)
        line = compact_files_diff(prev_file, curr_file)
+       return '' if line.empty?
        "#{Rainbow(line.count('+')).green}/#{Rainbow(line.count('-')).red}"
       end
 
