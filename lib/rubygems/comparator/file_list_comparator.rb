@@ -77,7 +77,7 @@ class Gem::Comparator
                     executables_changed(prev_file, curr_file),
                     shebangs_changed(prev_file, curr_file)
 
-          if !line_changes.empty? || changes.any?
+          unless (line_changes.empty? && changes.join.empty?)
             report[param][vers]['changed'] << \
               "#{file} changed: #{line_changes}"
           end
