@@ -58,14 +58,7 @@ class Gem::Comparator
 
               line_changes, permissions_changes, executable_changes, shebangs_changes = '', '', '', ''
               line_changes = compact_files_diff(prev_file, curr_file)
-
-              # Check permissions
-              prev_permissions = sprintf("%o", File.stat(prev_file).mode)
-              curr_permissions = sprintf("%o", File.stat(curr_file).mode)
-
-              if prev_permissions != curr_permissions
-                permissions_changes << "#{FAIL} permissions changed: #{prev_permissions} -> #{curr_permissions}"
-              end
+              permissions_changes = permission_changed(prev_file, curr_file)
 
               # Check executables
               prev_executable = File.stat(prev_file).executable?
@@ -149,6 +142,28 @@ class Gem::Comparator
           end
         end
 	changes
+      end
+
+      ##
+      # Get file's permission
+
+      def file_permissions(file)
+        sprintf("%o", File.stat(file).mode)
+      end
+
+      ##
+      # Find and return permission changes between files
+
+      def permission_changed(prev_file, curr_file)
+        prev_permissions = file_permissions(prev_file)
+        curr_permissions = file_permissions(curr_file)
+
+        if prev_permissions != curr_permissions
+          "#{FAIL} permissions changed: " +
+          "#{prev_permissions} -> #{curr_permissions}"
+        else
+          ''
+        end
       end
 
   end
