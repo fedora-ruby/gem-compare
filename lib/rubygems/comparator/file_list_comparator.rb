@@ -23,21 +23,9 @@ class Gem::Comparator
           next if index == 0
 
           # File lists as arrays
-          previous, current = [], []
-
-          if packages[index-1].spec.respond_to? :"#{param}"
-            previous = packages[index-1].spec.send(:"#{param}")
-          else
-            warn "#{packages[index-1].spec.full_name} does not respond to #{param}, skipping check"
-            next
-          end
-
-          if pkg.spec.respond_to? :"#{param}"
-            current = pkg.spec.send(:"#{param}")
-          else
-            warn "#{pkg.spec.full_name} does not respond to #{param}, skipping check"
-            next
-          end
+          previous = value_from_spec(param, packages[index-1].spec)
+          current = value_from_spec(param, pkg.spec)
+          next unless (previous && current)
 
           if previous == current && !all_same
             report[param] << "#{Rainbow(packages[index].spec.version).blue}: No change"
@@ -138,6 +126,18 @@ class Gem::Comparator
       end
       report
     end
+
+    private
+
+      def value_from_spec(param, spec)
+        if spec.respond_to? :"#{param}"
+          spec.send(:"#{param}")
+        else
+          warn "#{spec.full_name} does not respond to " +
+               "#{param}, skipping check"
+          nil
+        end
+      end
 
   end
 end
