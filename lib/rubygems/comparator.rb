@@ -9,6 +9,7 @@ require 'rubygems/comparator/report'
 require 'rubygems/comparator/spec_comparator'
 require 'rubygems/comparator/file_list_comparator'
 require 'rubygems/comparator/dependency_comparator'
+require 'rubygems/comparator/gemfile_comparator'
 
 class Gem::Comparator
   include Gem::Comparator::Base
@@ -59,9 +60,14 @@ class Gem::Comparator
 
     @report.set_header "Compared versions: #{versions}"
 
-    [SpecComparator, FileListComparator, DependencyComparator].each do |c|
+    comparators = [SpecComparator,
+                   FileListComparator,
+                   DependencyComparator,
+                   GemfileComparator]
+
+    comparators.each do |c|
       comparator = c.new
-      cmp = comparator.is_a?(FileListComparator) ? gem_packages.values : gem_specs.values
+      cmp = (c::COMPARES == :packages) ? gem_packages.values : gem_specs.values
       @report = comparator.compare(cmp, @report, @options)
     end
 

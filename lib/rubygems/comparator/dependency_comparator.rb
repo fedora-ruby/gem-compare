@@ -4,6 +4,8 @@ class Gem::Comparator
   class DependencyComparator
     include Gem::Comparator::Base
 
+    COMPARES = :specs
+
     ##
     # Compares dependencies in spec
 
@@ -32,12 +34,12 @@ class Gem::Comparator
 
             nest('deleted').section do
               set_header '* Deleted:'
-              puts deleted.map { |x| "#{x.name} #{x.requirements_list}" } unless deleted.empty?
+              puts deleted.map { |x| "#{x.name} #{x.requirements_list} (#{x.type})" } unless deleted.empty?
             end
 
             nest('added').section do
               set_header '* Added:'
-              puts added.map { |x| "#{x.name} #{x.requirements_list}" } unless added.empty?
+              puts added.map { |x| "#{x.name} #{x.requirements_list} (#{x.type})" } unless added.empty?
             end
 
             nest('updated').section do
@@ -71,8 +73,8 @@ class Gem::Comparator
             if ad.name == dd.name
               unless ad.requirements_list == dd.requirements_list
                 updated << "#{ad.name} " +
-			   "from: #{dd.requirements_list} " +
-		           "to: #{ad.requirements_list}"
+         "from: #{dd.requirements_list} " +
+               "to: #{ad.requirements_list}"
               end
               added.delete ad
               deleted.delete dd

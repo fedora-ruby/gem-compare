@@ -4,6 +4,8 @@ class Gem::Comparator
   class SpecComparator
     include Gem::Comparator::Base
 
+    COMPARES = :specs
+
     ##
     # Compares common fields in spec
 
@@ -30,16 +32,16 @@ class Gem::Comparator
     private
 
       def values_from_specs(param, specs)
-	values = []
+        values = []
         specs.each do |s|
           if s.respond_to? :"#{param}"
             values << s.send(:"#{param}")
           else
             warn "#{s.full_name} does not respond to " +
-		 "#{param}, skipping check"
+                 "#{param}, skipping check"
           end
         end
-	values
+        values
       end
 
       def same_values?(values)

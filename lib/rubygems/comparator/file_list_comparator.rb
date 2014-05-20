@@ -5,6 +5,8 @@ class Gem::Comparator
   class FileListComparator
     include Gem::Comparator::Base
 
+    COMPARES = :packages
+
     ##
     # Compares file lists in spec
 
@@ -92,8 +94,8 @@ class Gem::Comparator
           changes.each do |change|
             report[param][vers]['changed'] << change unless change.empty?
           end
-	end
-	report
+        end
+        report
       end
 
       def lines_changed(prev_file, curr_file)
@@ -121,14 +123,14 @@ class Gem::Comparator
       def compact_files_diff(prev_file, curr_file)
         changes = ''
         Diffy::Diff.new(
-	  prev_file, curr_file, :source => 'files', :context => 0
-	).each do |line|
+          prev_file, curr_file, :source => 'files', :context => 0
+        ).each do |line|
           case line
           when /^\+/ then changes << Rainbow('+').green
           when /^-/ then changes << Rainbow('-').red
           end
         end
-	changes
+        changes
       end
 
       ##
@@ -171,7 +173,7 @@ class Gem::Comparator
           File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
         rescue
           info "#{file} is binary, skipping shebang check"
-	  ''
+          ''
         end
       end
 
@@ -195,7 +197,7 @@ class Gem::Comparator
             "#{first_lines[prev_file]} -> #{first_lines[curr_file]}"
         else
             ''
-	end
+        end
      end
 
   end
