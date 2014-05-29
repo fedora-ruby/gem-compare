@@ -133,6 +133,7 @@ class Gem::Comparator
 
       package = Gem::Package.new File.join(@options[:output], gem_file)
       gem_packages["#{gem_file}"] = package
+      gem_specs["#{gem_file}"] = spec
       info "#{gem_file} downloaded."
 
       package
