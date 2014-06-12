@@ -16,8 +16,23 @@ class Gem::Comparator
         values = values_from_specs(param, specs)
 
         # Are values the same?
-        if same_values? values
-          report[param] << "#{SUCCESS} #{param}" if options[:log_all]
+        if same_values?(values) && options[:log_all]
+          report[param].section do
+            set_header "#{SUCCESS} #{param}"
+	    puts param
+	    values.each do |v|
+		    Kernel.puts v, v.inspect, v.class
+	    end
+            case values[0].class
+	    when String, Array, Hash
+	      puts values[0]
+	    when Gem::Requirement
+              Kernel.puts 'requirement'
+	    when NilClass
+              puts 'nil'
+            end
+	    puts values[0]
+          end
         else
           report[param].set_header "#{FAIL} #{param}:"
           values.each_with_index do |value, index|
