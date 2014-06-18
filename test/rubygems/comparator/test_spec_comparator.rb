@@ -19,6 +19,15 @@ class TestSpecComparator < Gem::TestCase
   end
 
   def test_licenses_comparison
-    assert_equal @report['licenses'].header.data, 'DIFFERENT licenses:'
+    assert_equal 'DIFFERENT license:',  @report['license'].header.data
+    assert_equal 'DIFFERENT licenses:', @report['licenses'].header.data
+    assert_equal '0.0.1: MIT',   @report['license'].all_messages[1].data
+    assert_equal '0.0.2: GPLv2', @report['license'].all_messages[2].data
+    assert_equal '0.0.3: GPLv2', @report['license'].all_messages[3].data
+    assert_equal '0.0.4: GPLv2', @report['license'].all_messages[4].data
+    assert_equal '0.0.1: MIT',   @report['licenses'].all_messages[1].data
+    assert_equal '0.0.2: GPLv2', @report['licenses'].all_messages[2].data
+    assert_equal '0.0.3: GPLv2', @report['licenses'].all_messages[3].data
+    assert_equal '0.0.4: GPLv2', @report['licenses'].all_messages[4].data
   end
 end
