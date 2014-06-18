@@ -49,9 +49,9 @@ class Gem::Comparator
           end
         end
         if all_same
-          report[param] << "#{SUCCESS} #{type} dependencies" if options[:log_all]
+          report[param] << "#{same} #{type} dependencies" if options[:log_all]
         else
-          report[param].set_header "#{FAIL} #{type} dependencies:"
+          report[param].set_header "#{different} #{type} dependencies:"
         end
       end
       report

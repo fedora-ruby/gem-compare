@@ -39,7 +39,7 @@ class Gem::Comparator
             same = current - added
 
             if !added.empty? || !deleted.empty?
-              report[param].set_header "#{FAIL} #{param}:"
+              report[param].set_header "#{different} #{param}:"
               all_same = false
             end
 
@@ -64,7 +64,7 @@ class Gem::Comparator
           end
         end
 
-        report[param] << "#{SUCCESS} #{param}" if all_same && options[:log_all]
+        report[param] << "#{same} #{param}" if all_same && options[:log_all]
       end
       report
     end
@@ -148,7 +148,7 @@ class Gem::Comparator
         curr_permissions = file_permissions(curr_file)
 
         if prev_permissions != curr_permissions
-          "#{FAIL} permissions: " +
+          "#{different} permissions: " +
           "#{prev_permissions} -> #{curr_permissions}"
         else
           ''
@@ -160,9 +160,9 @@ class Gem::Comparator
         curr_executable = File.stat(curr_file).executable?
 
         if !prev_executable && curr_executable
-          "#{FAIL} is now executable!"
+          "#{different} is now executable!"
         elsif prev_executable && !curr_executable
-          "#{FAIL} is no longer executable!"
+          "#{different} is no longer executable!"
         else
           ''
         end
@@ -189,11 +189,11 @@ class Gem::Comparator
         curr_has_shebang = (first_lines[curr_file] =~ SHEBANG_REGEX)
 
         if prev_has_shebang && !curr_has_shebang
-            "#{FAIL} shebang probably lost: #{first_lines[prev_file]}"
+            "#{different} shebang probably lost: #{first_lines[prev_file]}"
         elsif !prev_has_shebang && curr_has_shebang
-            "#{FAIL} shebang probably added: #{first_lines[curr_file]}"
+            "#{different} shebang probably added: #{first_lines[curr_file]}"
         elsif prev_has_shebang && curr_has_shebang
-            "#{FAIL} shebang probably changed: " +
+            "#{different} shebang probably changed: " +
             "#{first_lines[prev_file]} -> #{first_lines[curr_file]}"
         else
             ''

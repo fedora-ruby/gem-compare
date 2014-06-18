@@ -17,7 +17,7 @@ class Gem::Comparator
 
       # Check Gemfiles from older versions to newer
       all_same = true
-      report['gemfiles'].set_header "#{FAIL} Gemfile dependencies"
+      report['gemfiles'].set_header "#{different} Gemfile dependencies"
 
       packages.each_with_index do |pkg, index|
         unpacked_gem_dirs[@packages[index].spec.version] = extract_gem(pkg, options[:output])
@@ -58,7 +58,7 @@ class Gem::Comparator
       end
 
       if all_same
-        report['gemfiles'].set_header "#{SUCCESS} Gemfiles"
+        report['gemfiles'].set_header "#{same} Gemfiles"
       end
 
       report

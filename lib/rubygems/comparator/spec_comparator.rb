@@ -18,7 +18,7 @@ class Gem::Comparator
         # Are values the same?
         if same_values?(values) && options[:log_all]
           report[param].section do
-            set_header "#{SUCCESS} #{param}"
+            set_header "#{same} #{param}"
 	    puts param
 	    values.each do |v|
 		    Kernel.puts v, v.inspect, v.class
@@ -34,7 +34,7 @@ class Gem::Comparator
 	    puts values[0]
           end
         else
-          report[param].set_header "#{FAIL} #{param}:"
+          report[param].set_header "#{different} #{param}:"
           values.each_with_index do |value, index|
             report[param] << \
               "#{Rainbow(specs[index].version).blue}: #{value}"
