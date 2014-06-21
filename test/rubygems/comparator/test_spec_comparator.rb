@@ -32,4 +32,11 @@ class TestSpecComparator < Gem::TestCase
     assert_equal '0.0.3: GPLv2', @report['licenses'].lines[3]
     assert_equal '0.0.4: GPLv2', @report['licenses'].lines[4]
   end
+  
+  def test_authors_comparison
+    assert_equal 'SAME author:',  @report['author'].header.data
+    assert_equal 'SAME authors:', @report['authors'].header.data
+    assert_equal 'SAME author:',  @report['author'].lines[0]
+    assert_equal 'SAME authors:', @report['authors'].lines[0]
+  end
 end
