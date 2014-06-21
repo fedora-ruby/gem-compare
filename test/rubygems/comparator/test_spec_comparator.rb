@@ -39,4 +39,9 @@ class TestSpecComparator < Gem::TestCase
     assert_equal 'SAME author:',  @report['author'].lines[0]
     assert_equal 'SAME authors:', @report['authors'].lines[0]
   end
+  
+  def test_name_comparison
+    assert_equal 'SAME name:',  @report['author'].header.data
+    assert_equal 'SAME name:', @report['authors'].lines[0]
+  end
 end
