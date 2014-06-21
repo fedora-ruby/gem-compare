@@ -76,4 +76,13 @@ class TestSpecComparator < Gem::TestCase
     assert_equal '0.0.3: lorem changes a lot so we can test gem-compare a lot', @report['description'].lines[3]
     assert_equal '0.0.4: lorem changes a lot so we can test gem-compare plugin a lot', @report['description'].lines[4]
   end
+  
+  def test_homepage_comparison
+    assert_equal 'DIFFERENT homepage:',  @report['homepage'].header.data
+    assert_equal 'DIFFERENT homepage:',  @report['homepage'].lines[0]
+    assert_equal '0.0.1: ',   @report['homepage'].lines[1]
+    assert_equal '0.0.2: ', @report['homepage'].lines[2]
+    assert_equal '0.0.3: http://lorem.lorem', @report['homepage'].lines[3]
+    assert_equal '0.0.4: http://lorem.lorem', @report['homepage'].lines[4]
+  end
 end
