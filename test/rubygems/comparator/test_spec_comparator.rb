@@ -54,5 +54,10 @@ class TestSpecComparator < Gem::TestCase
     assert_equal 'SAME authors:', @report['authors'].lines[0]
   end
   
+  def test_email_comparison
+    assert_equal 'SAME email:',  @report['email'].header.data
+    assert_equal 'SAME email:', @report['email'].lines[0]
+  end
+  
   
 end
