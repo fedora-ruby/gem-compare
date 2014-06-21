@@ -85,4 +85,85 @@ class TestSpecComparator < Gem::TestCase
     assert_equal '0.0.3: http://lorem.lorem', @report['homepage'].lines[3]
     assert_equal '0.0.4: http://lorem.lorem', @report['homepage'].lines[4]
   end
+  
+  def test_platform_comparison
+    assert_equal 'SAME platform:',  @report['platform'].header.data
+    assert_equal 'SAME platform:', @report['platform'].lines[0]
+  end
+  
+  def test_require_paths_comparison
+    assert_equal 'SAME require_paths:',  @report['require_paths'].header.data
+    assert_equal 'SAME require_paths:', @report['require_paths'].lines[0]
+  end
+  
+  def test_bindir_comparison
+    assert_equal 'SAME bindir:',  @report['bindir'].header.data
+    assert_equal 'SAME bindir:', @report['bindir'].lines[0]
+  end
+  
+  def test_rubygems_version_comparison
+    assert_equal 'SAME rubygems_version:',  @report['rubygems_version'].header.data
+    assert_equal 'SAME rubygems_version:', @report['rubygems_version'].lines[0]
+  end
+  
+  def test_cert_chain_comparison
+    assert_equal 'SAME cert_chain:',  @report['cert_chain'].header.data
+    assert_equal 'SAME cert_chain:', @report['cert_chain'].lines[0]
+  end
+  
+  def test_executables_comparison
+    assert_equal 'SAME executables:',  @report['executables'].header.data
+    assert_equal 'SAME executables:', @report['executables'].lines[0]
+  end
+  
+  def test_extensions_comparison
+    assert_equal 'SAME extensions:',  @report['extensions'].header.data
+    assert_equal 'SAME extensions:', @report['extensions'].lines[0]
+  end
+  
+  def test_metadata_comparison
+    assert_equal 'SAME metadata:',  @report['metadata'].header.data
+    assert_equal 'SAME metadata:', @report['metadata'].lines[0]
+  end
+  
+  def test_post_install_message_comparison
+    assert_equal 'SAME post_install_message:',  @report['post_install_message'].header.data
+    assert_equal 'SAME post_install_message:', @report['post_install_message'].lines[0]
+  end
+  
+  def test_rdoc_options_comparison
+    assert_equal 'SAME rdoc_options:',  @report['rdoc_options'].header.data
+    assert_equal 'SAME rdoc_options:', @report['rdoc_options'].lines[0]
+  end
+  
+  def test_required_ruby_version_comparison
+    assert_equal 'SAME required_ruby_version:',  @report['required_ruby_version'].header.data
+    assert_equal 'SAME required_ruby_version:', @report['required_ruby_version'].lines[0]
+  end
+  
+  def test_required_rubygems_version_comparison
+    assert_equal 'SAME required_rubygems_version:',  @report['required_rubygems_version'].header.data
+    assert_equal 'SAME required_rubygems_version:', @report['required_rubygems_version'].lines[0]
+  end
+  
+  def test_requirements_comparison
+    assert_equal 'SAME requirements:',  @report['requirements'].header.data
+    assert_equal 'SAME requirements:', @report['requirements'].lines[0]
+  end
+  
+  def test_signing_key_comparison
+    assert_equal 'SAME signing_key:',  @report['signing_key'].header.data
+    assert_equal 'SAME signing_key:', @report['signing_key'].lines[0]
+  end
+  
+  def test_has_rdoc_comparison
+    assert_equal 'SAME has_rdoc:',  @report['has_rdoc'].header.data
+    assert_equal 'SAME has_rdoc:', @report['has_rdoc'].lines[0]
+  end
+  
+  def test_date_comparison
+    assert_equal 'SAME date:',  @report['date'].header.data
+    assert_equal 'SAME date:', @report['date'].lines[0]
+  end
+  
 end
