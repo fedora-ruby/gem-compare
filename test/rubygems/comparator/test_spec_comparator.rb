@@ -17,6 +17,20 @@ class TestSpecComparator < Gem::TestCase
 
     @report = @comparator.report
   end
+  
+  def test_name_comparison
+    assert_equal 'SAME name:',  @report['name'].header.data
+    assert_equal 'SAME name:', @report['name'].lines[0]
+  end
+  
+  def test_version_comparison
+    assert_equal 'DIFFERENT version:',  @report['version'].header.data
+    assert_equal 'DIFFERENT version:',  @report['version'].lines[0]
+    assert_equal '0.0.1: 0.0.1',   @report['version'].lines[1]
+    assert_equal '0.0.2: 0.0.2', @report['version'].lines[2]
+    assert_equal '0.0.3: 0.0.3', @report['version'].lines[3]
+    assert_equal '0.0.4: 0.0.4', @report['version'].lines[4]
+  end
 
   def test_licenses_comparison
     assert_equal 'DIFFERENT license:',  @report['license'].header.data
@@ -40,8 +54,5 @@ class TestSpecComparator < Gem::TestCase
     assert_equal 'SAME authors:', @report['authors'].lines[0]
   end
   
-  def test_name_comparison
-    assert_equal 'SAME name:',  @report['author'].header.data
-    assert_equal 'SAME name:', @report['authors'].lines[0]
-  end
+  
 end
