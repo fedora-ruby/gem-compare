@@ -59,6 +59,10 @@ class Gem::Comparator
           nested.unshift(@header)
         end
       end
+      
+      def lines(line_num)
+        all_messages[line_num].data
+      end
 
       def nested_messages
         nested_messages = []

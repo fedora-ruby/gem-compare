@@ -21,13 +21,15 @@ class TestSpecComparator < Gem::TestCase
   def test_licenses_comparison
     assert_equal 'DIFFERENT license:',  @report['license'].header.data
     assert_equal 'DIFFERENT licenses:', @report['licenses'].header.data
-    assert_equal '0.0.1: MIT',   @report['license'].all_messages[1].data
-    assert_equal '0.0.2: GPLv2', @report['license'].all_messages[2].data
-    assert_equal '0.0.3: GPLv2', @report['license'].all_messages[3].data
-    assert_equal '0.0.4: GPLv2', @report['license'].all_messages[4].data
-    assert_equal '0.0.1: MIT',   @report['licenses'].all_messages[1].data
-    assert_equal '0.0.2: GPLv2', @report['licenses'].all_messages[2].data
-    assert_equal '0.0.3: GPLv2', @report['licenses'].all_messages[3].data
-    assert_equal '0.0.4: GPLv2', @report['licenses'].all_messages[4].data
+    assert_equal 'DIFFERENT license:',  @report['license'].lines[0]
+    assert_equal 'DIFFERENT licenses:', @report['licenses'].lines[0]
+    assert_equal '0.0.1: MIT',   @report['license'].lines[1]
+    assert_equal '0.0.2: GPLv2', @report['license'].lines[2]
+    assert_equal '0.0.3: GPLv2', @report['license'].lines[3]
+    assert_equal '0.0.4: GPLv2', @report['license'].lines[4]
+    assert_equal '0.0.1: MIT',   @report['licenses'].lines[1]
+    assert_equal '0.0.2: GPLv2', @report['licenses'].lines[2]
+    assert_equal '0.0.3: GPLv2', @report['licenses'].lines[3]
+    assert_equal '0.0.4: GPLv2', @report['licenses'].lines[4]
   end
 end
