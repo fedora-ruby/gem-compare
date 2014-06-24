@@ -19,7 +19,7 @@ class Gem::Comparator
         if same_values?(values) && options[:log_all]
           report[param].section do
             set_header "#{same} #{param}"
-	    puts values[0]	    
+	    puts values[0].inspect
           end
 	elsif !same_values?(values)
           report[param].set_header "#{different} #{param}:"
