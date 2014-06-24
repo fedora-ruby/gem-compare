@@ -6,6 +6,7 @@ class Gem::Comparator
     end
 
     class NestedSection
+      include Gem::Comparator::Base
       include Gem::UserInteraction
 
       DEFAULT_INDENT = '  '
