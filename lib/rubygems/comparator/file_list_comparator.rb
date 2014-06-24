@@ -29,9 +29,11 @@ class Gem::Comparator
           current = value_from_spec(param, pkg.spec)
           next unless (previous && current)
 
+          vers = "#{packages[index-1].spec.version}->#{packages[index].spec.version}"
+
           if previous == current && !all_same
-            report[param] << "#{Rainbow(packages[index-1].spec.version).blue}->" + \
-                             "#{Rainbow(packages[index].spec.version).blue}: No change"
+            report[param][vers] << "#{Rainbow(packages[index-1].spec.version).blue}->" + \
+                                   "#{Rainbow(packages[index].spec.version).blue}: No change"
           end
 
           unless previous == current
@@ -43,8 +45,6 @@ class Gem::Comparator
               report[param].set_header "#{different} #{param}:"
               all_same = false
             end
-
-            vers = "#{packages[index-1].spec.version}->#{packages[index].spec.version}"
 
             report[param][vers].section do
               set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
