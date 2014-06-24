@@ -132,8 +132,7 @@ class Gem::Comparator
       end
 
       package = Gem::Package.new File.join(@options[:output], gem_file)
-      gem_packages["#{gem_file}"] = package
-      gem_specs["#{gem_file}"] = spec
+      use_package(package)
       info "#{gem_file} downloaded."
 
       package
@@ -159,14 +158,18 @@ class Gem::Comparator
       if File.exists? File.join(@options[:output], gem_file)
         info "#{gem_file} exists, using already downloaded file."
         package = Gem::Package.new File.join(@options[:output], gem_file)
-        gem_packages["#{gem_file}"] = package
-        gem_specs["#{gem_file}"] = package.spec
+        use_package(package)
         [package, package.spec]
       else
         [nil, nil]
       end
     end
 
+    def use_package(package)
+      gem_file = gem_file_name(package.spec.name, package.spec.version)
+      gem_packages["#{gem_file}"] = package
+      gem_specs["#{gem_file}"] = package.spec
+    end
 
     def download_gems?
       @options[:param] ? SPEC_FILES_PARAMS.include?(@options[:param]) : true
