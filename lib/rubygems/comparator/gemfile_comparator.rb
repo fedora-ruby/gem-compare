@@ -17,7 +17,6 @@ class Gem::Comparator
 
       # Check Gemfiles from older versions to newer
       all_same = true
-      report['gemfiles'].set_header "#{different} Gemfile dependencies"
 
       packages.each_with_index do |pkg, index|
         unpacked_gem_dirs[@packages[index].spec.version] = extract_gem(pkg, options[:output])
@@ -45,9 +44,7 @@ class Gem::Comparator
             set_header '* updated'
             puts updated  unless updated.empty?
           end
-
-          all_same = false if !added.empty? || deleted.empty?
-
+          all_same = false if !added.empty? || !deleted.empty?
         elsif File.exists?(prev_gemfile)
           report['gemfiles'][vers] << "Gemfile removed"
           all_same = false
@@ -56,9 +53,10 @@ class Gem::Comparator
           all_same = false
         end
       end
-
-      if all_same
-        report['gemfiles'].set_header "#{same} Gemfiles"
+      if all_same && options[:log_all]
+        report['gemfiles'] << "#{same} Gemfiles"
+      elsif !all_same
+        report['gemfiles'].set_header "#{different} Gemfile dependencies"
       end
 
       report
