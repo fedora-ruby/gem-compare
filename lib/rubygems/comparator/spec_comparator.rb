@@ -19,10 +19,7 @@ class Gem::Comparator
         if same_values?(values) && options[:log_all]
           report[param].section do
             set_header "#{same} #{param}"
-	    puts param
-	    values.each do |v|
-		    Kernel.puts v, v.inspect, v.class
-	    end
+=begin	    
             case values[0].class
 	    when String, Array, Hash
 	      puts values[0]
@@ -31,7 +28,8 @@ class Gem::Comparator
 	    when NilClass
               puts 'nil'
             end
-	    puts values[0]
+=end	 
+	    puts values[0]	    
           end
         else
           report[param].set_header "#{different} #{param}:"
