@@ -30,7 +30,8 @@ class Gem::Comparator
           next unless (previous && current)
 
           if previous == current && !all_same
-            report[param] << "#{Rainbow(packages[index].spec.version).blue}: No change"
+            report[param] << "#{Rainbow(packages[index-1].spec.version).blue}->" + \
+                             "#{Rainbow(packages[index].spec.version).blue}: No change"
           end
 
           unless previous == current
