@@ -48,9 +48,10 @@ class Gem::Comparator
             end
           end
         end
-        if all_same
-          report[param] << "#{same} #{type} dependencies" if options[:log_all]
-        else
+        if all_same && options[:log_all]
+          report[param].set_header "#{same} #{type} dependencies" if options[:log_all]
+          report[param] << specs[0].dependencies.keep_if{ |d| d.type == type }.inspect
+        elsif !all_same
           report[param].set_header "#{different} #{type} dependencies:"
         end
       end
