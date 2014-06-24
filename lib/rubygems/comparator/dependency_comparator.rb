@@ -74,8 +74,8 @@ class Gem::Comparator
             if ad.name == dd.name
               unless ad.requirements_list == dd.requirements_list
                 updated << "#{ad.name} " +
-         "from: #{dd.requirements_list} " +
-               "to: #{ad.requirements_list}"
+                           "from: #{dd.requirements_list} " +
+                           "to: #{ad.requirements_list}"
               end
               added.delete ad
               deleted.delete dd
