@@ -55,7 +55,17 @@ class Gem::Comparator
       end
       if all_same && options[:log_all]
         report['gemfiles'].set_header "#{same} Gemfiles:"
-        report['gemfiles'] << gemfile_deps(prev_gemfile)
+        gemfile = File.join(unpacked_gem_dirs[@packages[1].spec.version], 'Gemfile')
+        if File.exists? gemfile
+          deps = gemfile_deps(gemfile)
+          unless deps.empty?
+            report['gemfiles'] << gemfile_deps(gemfile)
+          else
+           report['gemfiles'] << []
+          end
+        else
+          report['gemfiles'] << 'No Gemfiles'
+        end
       elsif !all_same
         report['gemfiles'].set_header "#{different} Gemfile dependencies"
       end
