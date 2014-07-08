@@ -94,7 +94,7 @@ class Gem::Comparator
 
           unless (line_changes.empty? && changes.join.empty?)
             report[param][vers]['changed'] << \
-              "#{file} changed: #{line_changes}"
+              "#{file} #{line_changes}"
           end
 
           changes.each do |change|
