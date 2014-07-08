@@ -17,10 +17,11 @@ class Gem::Comparator
 
         # Are values the same?
         if same_values?(values) && options[:log_all]
+          v = value(values[0]) 
           report[param].section do
             set_header "#{same} #{param}:"
-	    puts values[0].inspect
-          end
+	    puts v
+        end
 	elsif !same_values?(values)
           report[param].set_header "#{different} #{param}:"
           values.each_with_index do |value, index|
@@ -45,6 +46,23 @@ class Gem::Comparator
           end
         end
         values
+      end
+
+      def value(value)
+        case value
+        when Gem::Requirement
+          unless value.requirements.empty?
+            r = value.requirements[0]
+            "#{r[0]} #{r[1].version} " 
+          else
+            '[]'
+          end
+        when String
+          return value unless value.empty?
+          ''
+        else
+          value.inspect
+        end
       end
 
       def same_values?(values)
