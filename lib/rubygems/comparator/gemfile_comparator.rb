@@ -54,7 +54,8 @@ class Gem::Comparator
         end
       end
       if all_same && options[:log_all]
-        report['gemfiles'] << "#{same} Gemfiles"
+        report['gemfiles'].set_header "#{same} Gemfiles:"
+        report['gemfiles'] << gemfile_deps(prev_gemfile)
       elsif !all_same
         report['gemfiles'].set_header "#{different} Gemfile dependencies"
       end

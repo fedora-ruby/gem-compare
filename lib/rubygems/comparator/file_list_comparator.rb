@@ -66,7 +66,7 @@ class Gem::Comparator
         end
 
         if all_same && options[:log_all]
-          report[param].set_header "#{same} #{param}"
+          report[param].set_header "#{same} #{param}:"
           report[param] << value_from_spec(param, @packages[0].spec).inspect
 	end
       end
