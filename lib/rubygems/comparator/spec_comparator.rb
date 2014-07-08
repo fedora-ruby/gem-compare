@@ -1,13 +1,18 @@
 require 'rubygems/comparator/base'
 
 class Gem::Comparator
+
+  ##
+  # Gem::Comparator::SpecComparator can
+  # compare values from the gem verions specs
+  
   class SpecComparator
     include Gem::Comparator::Base
 
     COMPARES = :specs
 
     ##
-    # Compares common fields in spec
+    # Compare common fields in spec
 
     def compare(specs, report, options = {})
       info 'Checking spec parameters...'
@@ -20,9 +25,9 @@ class Gem::Comparator
           v = value(values[0]) 
           report[param].section do
             set_header "#{same} #{param}:"
-	    puts v
-        end
-	elsif !same_values?(values)
+	        puts v
+          end
+        elsif !same_values?(values)
           report[param].set_header "#{different} #{param}:"
           values.each_with_index do |value, index|
             report[param] << \

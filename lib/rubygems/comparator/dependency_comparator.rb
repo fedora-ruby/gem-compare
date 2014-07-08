@@ -1,13 +1,23 @@
 require 'rubygems/comparator/base'
 
 class Gem::Comparator
+
+  ##
+  # Gem::Comparator::DependencyComparator can
+  # compare dependencies between gem's versions
+  # based on the given Gem::Specification objects
+
   class DependencyComparator
     include Gem::Comparator::Base
 
     COMPARES = :specs
 
     ##
-    # Compares dependencies in spec
+    # Compare dependencies in given +specs+ and
+    # write the changes to the +report+
+    # 
+    # If +options[:param]+ is set, it compares only
+    # those dependencies
 
     def compare(specs, report, options = {})
       info 'Checking dependencies...'
@@ -61,15 +71,25 @@ class Gem::Comparator
     end
 
     private
+      
+      ##
+      # Find dependencies between +prev_deps+ and +curr_deps+  
+      #
+      # Return [added, deleted, updated] deps
 
       def resolve_dependencies(prev_deps, curr_deps)
         added = curr_deps - prev_deps
         deleted = prev_deps - curr_deps
         split_dependencies(added, deleted)
       end
+    
+      ##
+      # Find updated dependencies between +added+ and
+      # +deleted+ deps and move them out to +updated+.
+      #
+      # Return [added, deleted, updated] deps
 
       def split_dependencies(added, deleted)
-        # Find updated dependencies
         updated = []
         added.dup.each do |ad|
           deleted.dup.each do |dd|

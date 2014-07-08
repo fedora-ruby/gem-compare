@@ -2,13 +2,26 @@ require 'diffy'
 require 'rubygems/comparator/base'
 
 class Gem::Comparator
+
+  ##
+  # Gem::Comparator::FileListComparator can
+  # compare file lists from gem's specs
+  # based on the given Gem::Package objects
+  #
+  # To compare the files it needs to extract
+  # gem packages to +options[:output]+
+
   class FileListComparator
     include Gem::Comparator::Base
 
     COMPARES = :packages
 
     ##
-    # Compares file lists in spec
+    # Compare file lists for gem's Gem::Package objects
+    # in +packages+ and writes the changes to the +report+
+    #
+    # If +options[:param]+ is set, it compares only
+    # that file list
 
     def compare(packages, report, options = {})
       info 'Checking file lists...'
@@ -77,6 +90,12 @@ class Gem::Comparator
 
     private
 
+      ##
+      # Access @unpacked_gem_dirs hash that stores
+      # paths to the unpacked gem dirs
+      # 
+      # Keys of the hash are gem's versions
+
       def unpacked_gem_dirs
         @unpacked_gem_dirs ||= {}
       end
@@ -104,11 +123,18 @@ class Gem::Comparator
         report
       end
 
+      ##
+      # Return how many lines differ between +prev_file+
+      # and +curr_file+ in format +ADDED/-DELETED
+
       def lines_changed(prev_file, curr_file)
-       line = compact_files_diff(prev_file, curr_file)
-       return '' if line.empty?
-       "#{Rainbow(line.count('+')).green}/#{Rainbow(line.count('-')).red}"
+        line = compact_files_diff(prev_file, curr_file)
+        return '' if line.empty?
+        "#{Rainbow(line.count('+')).green}/#{Rainbow(line.count('-')).red}"
       end
+
+      ##
+      # Return +value+ in the given +spec+
 
       def value_from_spec(param, spec)
         if spec.respond_to? :"#{param}"
@@ -121,8 +147,7 @@ class Gem::Comparator
       end
 
       ##
-      # Return changes between files
-      #
+      # Return changes between files:
       # + for line added
       # - for line deleted
 
@@ -160,6 +185,9 @@ class Gem::Comparator
           ''
         end
       end
+    
+      ##
+      # Find if the file is now/or was executable
 
       def executables_changed(prev_file, curr_file)
         prev_executable = File.stat(prev_file).executable?
@@ -174,6 +202,9 @@ class Gem::Comparator
         end
       end
 
+      ##
+      # Return the first line of the +file+
+
       def first_line(file)
         begin
           File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
@@ -183,8 +214,12 @@ class Gem::Comparator
         end
       end
 
+      ##
+      # Find if the shabang of the file has been changed
+
       def shebangs_changed(prev_file, curr_file)
         first_lines = {}
+
         [prev_file, curr_file].each do |file|
           first_lines[file] = first_line(file)
         end

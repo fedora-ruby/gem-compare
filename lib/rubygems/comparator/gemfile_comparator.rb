@@ -2,22 +2,31 @@ require 'gemnasium/parser'
 require 'rubygems/comparator/base'
 
 class Gem::Comparator
+
+  ##
+  # Gem::Comparator::GemfileComparator can
+  # compare dependencies between gem's Gemfiles
+  # based on the given Gem::Package objects
+  #
+  # To compare Gemfiles it needs to extract
+  # gem packages to +options[:output]+
+
   class GemfileComparator
     include Gem::Comparator::Base
 
     COMPARES = :packages
 
     ##
-    # Compares Gemfiles
+    # Compare Gemfiles using gem's +packages+
+    # and write the changes to the +report+
 
     def compare(packages, report, options = {})
       info 'Checking Gemfiles for dependencies...'
 
       @packages = packages
-
-      # Check Gemfiles from older versions to newer
       all_same = true
 
+      # Check Gemfiles from older versions to newer
       packages.each_with_index do |pkg, index|
         unpacked_gem_dirs[@packages[index].spec.version] = extract_gem(pkg, options[:output])
         next if index == 0
@@ -71,10 +80,21 @@ class Gem::Comparator
     end
 
     private
+    
+      ##
+      # Access @unpacked_gem_dirs hash that stores
+      # paths to the unpacked gem dirs
+      # 
+      # Keys of the hash are gem's versions
 
       def unpacked_gem_dirs
         @unpacked_gem_dirs ||= {}
       end
+    
+      ##
+      # Compare two Gemfiles for dependencies
+      #
+      # Return [added, deleted, updated] deps
 
       def compare_gemfiles(prev_gemfile, curr_gemfile)
         prev_deps = gemfile_deps(prev_gemfile)
@@ -84,17 +104,30 @@ class Gem::Comparator
 
         split_dependencies(added, deleted)
       end
+    
+      ##
+      # Get the Gemfile dependencies from +gemfile+
 
       def gemfile_deps(gemfile)
         parse_gemfile(gemfile).dependencies
       end
+    
+      ##
+      # Parse +gemfile+ using Gemnasium::Parser
+      #
+      # Return Gemnasium::Parser::Gemfile
 
       def parse_gemfile(gemfile)
         Gemnasium::Parser.gemfile File.open(gemfile).read
       end
+    
+      ##
+      # Find updated dependencies between +added+ and
+      # +deleted+ deps and move them out to +updated+.
+      #
+      # Return [added, deleted, updated] deps
 
       def split_dependencies(added, deleted)
-        # Find updated dependencies
         updated = []
         added.dup.each do |ad|
           deleted.dup.each do |dd|
