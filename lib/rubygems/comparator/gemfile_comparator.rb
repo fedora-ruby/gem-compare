@@ -58,11 +58,8 @@ class Gem::Comparator
         gemfile = File.join(unpacked_gem_dirs[@packages[1].spec.version], 'Gemfile')
         if File.exists? gemfile
           deps = gemfile_deps(gemfile)
-          unless deps.empty?
-            report['gemfiles'] << gemfile_deps(gemfile)
-          else
-           report['gemfiles'] << []
-          end
+          deps = '[]' if deps.empty?
+          report['gemfiles'] << deps
         else
           report['gemfiles'] << 'No Gemfiles'
         end
