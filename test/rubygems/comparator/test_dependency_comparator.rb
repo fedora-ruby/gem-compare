@@ -1,23 +1,7 @@
-require 'rubygems/test_case'
-require 'rubygems/comparator'
+require 'test_helper'
 
-class TestDependencyComparator < Gem::TestCase
-  def setup
-    super
+class TestDependencyComparator < TestGemComparator
 
-    options = { keep_all: true, log_all: true, no_color: true }
-    versions = ['0.0.1', '0.0.2', '0.0.3', '0.0.4']
-
-    @comparator = Gem::Comparator.new(options)
-
-    Dir.chdir(File.expand_path('../../gemfiles', File.dirname(__FILE__))) do
-      @comparator.options.merge!({ output: Dir.getwd })
-      @comparator.compare_versions('lorem', versions)
-    end
-
-    @report = @comparator.report
-  end
-  
   def test_runtime_dependencies_comparison
     assert_equal 'DIFFERENT runtime dependencies:', @report['runtime_dependency'].header.data
     assert_equal 'DIFFERENT runtime dependencies:', @report['runtime_dependency'].lines(0)
