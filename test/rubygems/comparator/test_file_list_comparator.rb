@@ -17,6 +17,6 @@ class TestFileListComparator < TestGemComparator
   end
 
   def test_test_files_comparison
-    assert_equal 'SAME test_files', @report['test_files'].header.data
+    assert_equal 'SAME test_files:', @report['test_files'].header.data
   end
 end
