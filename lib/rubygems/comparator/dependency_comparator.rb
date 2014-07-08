@@ -30,7 +30,7 @@ class Gem::Comparator
           ver = "#{specs[index-1].version}->#{specs[index].version}"
 
           report[param][ver].section do
-            set_header "#{Rainbow(specs[index-1].version).blue}->#{Rainbow(s.version).blue}: "
+            set_header "#{Rainbow(specs[index-1].version).blue}->#{Rainbow(s.version).blue}:"
 
             nest('deleted').section do
               set_header '* Deleted:'
