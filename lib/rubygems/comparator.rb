@@ -126,7 +126,7 @@ class Gem::Comparator
     end
 
     def gem_file_name(gem_name, version)
-     "#{gem_name}-#{version}.gem"
+      "#{gem_name}-#{version}.gem"
     end
 
     def download_package(gem_name, version)
@@ -157,7 +157,7 @@ class Gem::Comparator
       return gem_specs["#{gem_file}"] if gem_specs["#{gem_file}"]
 
       dep = Gem::Dependency.new gem_name, version
-      specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
+      specs_and_sources, _errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
       spec, source = specs_and_sources.max_by { |s,| s.version }
       error "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
       gem_specs["#{gem_file}"] = spec
@@ -166,7 +166,7 @@ class Gem::Comparator
     end
 
     def find_downloaded_gem(gem_file)
-      if File.exists? File.join(@options[:output], gem_file)
+      if File.exist? File.join(@options[:output], gem_file)
         info "#{gem_file} exists, using already downloaded file."
         package = Gem::Package.new File.join(@options[:output], gem_file)
         use_package(package)

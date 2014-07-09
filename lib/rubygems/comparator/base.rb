@@ -66,7 +66,7 @@ class Gem::Comparator
         gem_file = File.basename(package.spec.full_name, '.gem')
         gem_dir = File.join(target_dir, gem_file)
 
-        if Dir.exists? gem_dir
+        if Dir.exist? gem_dir
           info "Unpacked gem version exists, using #{gem_dir}."
           return gem_dir
         end

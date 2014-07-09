@@ -39,7 +39,7 @@ class Gem::Comparator
         report['gemfiles'][vers].set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
                                             "#{Rainbow(packages[index].spec.version).blue}:"
 
-        if File.exists?(prev_gemfile) && File.exists?(curr_gemfile)
+        if File.exist?(prev_gemfile) && File.exist?(curr_gemfile)
           added, deleted, updated = compare_gemfiles(prev_gemfile, curr_gemfile)
 
           report['gemfiles'][vers]['added'].section do
@@ -55,10 +55,10 @@ class Gem::Comparator
             puts updated  unless updated.empty?
           end
           all_same = false if !added.empty? || !deleted.empty?
-        elsif File.exists?(prev_gemfile)
+        elsif File.exist?(prev_gemfile)
           report['gemfiles'][vers] << "Gemfile removed"
           all_same = false
-        elsif File.exists?(curr_gemfile)
+        elsif File.exist?(curr_gemfile)
           report['gemfiles'][vers] << "Gemfile added"
           all_same = false
         end
@@ -66,7 +66,7 @@ class Gem::Comparator
       if all_same && options[:log_all]
         report['gemfiles'].set_header "#{same} Gemfiles:"
         gemfile = File.join(unpacked_gem_dirs[@packages[1].spec.version], 'Gemfile')
-        if File.exists? gemfile
+        if File.exist? gemfile
           deps = gemfile_deps(gemfile)
           deps = '[]' if deps.empty?
           report['gemfiles'] << deps

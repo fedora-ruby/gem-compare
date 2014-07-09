@@ -130,7 +130,7 @@ class Gem::Comparator
 
       def check_files(files)
         files.each do |file|
-          unless File.exists? file
+          unless File.exist? file
             warn "#{file} mentioned in spec does not exist " +
                  "in the gem package, skipping check"
             return false
