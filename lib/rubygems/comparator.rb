@@ -90,7 +90,7 @@ class Gem::Comparator
           expanded << version
           next
         end
-        op, v = (version.scan /(>=|<=|~>)(.*)/).flatten
+        op, v = (version.scan /(=|>|<|>=|<=|~>|!=)(.*)/).flatten
 
         # Supported operator and version?
         if OPERATORS.include?(op) && v =~ VERSION_REGEX
