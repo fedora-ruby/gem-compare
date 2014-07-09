@@ -105,6 +105,8 @@ class Gem::Comparator
           prev_file = File.join(unpacked_gem_dirs[@packages[index-1].spec.version], file)
           curr_file = File.join(unpacked_gem_dirs[@packages[index].spec.version], file)
 
+          next unless check_files([prev_file, curr_file])
+
           line_changes = lines_changed(prev_file, curr_file)
 
           changes = permission_changed(prev_file, curr_file),
@@ -122,6 +124,21 @@ class Gem::Comparator
         end
         report
       end
+
+      ##
+      # Check that files exist
+
+      def check_files(files)
+        files.each do |file|
+          unless File.exists? file
+            warn "#{file} mentioned in spec does not exist " +
+                 "in the gem package, skipping check"
+            return false
+          end
+        end
+        true
+      end
+
 
       ##
       # Return how many lines differ between +prev_file+
@@ -179,7 +196,7 @@ class Gem::Comparator
         curr_permissions = file_permissions(curr_file)
 
         if prev_permissions != curr_permissions
-          "#{different} permissions: " +
+          "  (!) New permissions: " +
           "#{prev_permissions} -> #{curr_permissions}"
         else
           ''
@@ -194,9 +211,9 @@ class Gem::Comparator
         curr_executable = File.stat(curr_file).executable?
 
         if !prev_executable && curr_executable
-          "#{different} is now executable!"
+          "  (!) File is now executable!"
         elsif prev_executable && !curr_executable
-          "#{different} is no longer executable!"
+          "  (!) File is no longer executable!"
         else
           ''
         end
@@ -230,11 +247,11 @@ class Gem::Comparator
         curr_has_shebang = (first_lines[curr_file] =~ SHEBANG_REGEX)
 
         if prev_has_shebang && !curr_has_shebang
-            "#{different} shebang probably lost: #{first_lines[prev_file]}"
+            "  (!) Shebang probably lost: #{first_lines[prev_file]}"
         elsif !prev_has_shebang && curr_has_shebang
-            "#{different} shebang probably added: #{first_lines[curr_file]}"
+            "  (!) Shebang probably added: #{first_lines[curr_file]}"
         elsif prev_has_shebang && curr_has_shebang
-            "#{different} shebang probably changed: " +
+            "  (!) Shebang probably changed: " +
             "#{first_lines[prev_file]} -> #{first_lines[curr_file]}"
         else
             ''
