@@ -11,6 +11,11 @@ require 'rubygems/comparator/file_list_comparator'
 require 'rubygems/comparator/dependency_comparator'
 require 'rubygems/comparator/gemfile_comparator'
 
+##
+# Gem::Comparator compares different version of the given
+# gem. It can compare spec values as well as file lists or
+# Gemfiles
+
 class Gem::Comparator
   include Gem::Comparator::Base
   attr_accessor :options, :report
