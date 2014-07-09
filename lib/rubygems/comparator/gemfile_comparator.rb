@@ -22,6 +22,7 @@ class Gem::Comparator
 
     def compare(packages, report, options = {})
       info 'Checking Gemfiles for dependencies...'
+      return report if options[:param] && options[:param] != 'gemfiles'
 
       @packages = packages
       all_same = true
