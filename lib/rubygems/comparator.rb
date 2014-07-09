@@ -87,6 +87,13 @@ class Gem::Comparator
 
   private
 
+    ##
+    # If there is an unexpanded version in +versions+ such
+    # as '>= 4.0.0' or '~>1.0.0', find all existing
+    # +gem_name+ versions that match the criteria
+    #
+    # Return list of expanded versions
+
     def expand_versions(gem_name, versions)
       info 'Expanding versions...'
       expanded = []
