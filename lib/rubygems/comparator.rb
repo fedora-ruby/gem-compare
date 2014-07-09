@@ -183,6 +183,7 @@ class Gem::Comparator
     end
 
     def download_gems?
+      return true if @options[:keep_all]
       @options[:param] ? SPEC_FILES_PARAMS.include?(@options[:param]) : true
     end
 
