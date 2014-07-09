@@ -57,7 +57,6 @@ Compared versions: ["3.0.0", "4.0.0"]
             guides/assets/images/belongs_to.png
             guides/assets/images/book_icon.gif
 (...)
-...
 ```
 
 You can also specify what you are interested in by using -p (as 'param') option:
@@ -75,7 +74,6 @@ Compared versions: ["4.0.0", "4.1.0"]
             i18n from: [">= 0.6.4", "~> 0.6"] to: [">= 0.6.9", "~> 0.6"]
             tzinfo from: ["~> 0.3.37"] to: ["~> 1.1"]
             minitest from: ["~> 4.2"] to: ["~> 5.1"]
-
 ```
 There are also shortcuts for favourite options. Use `--runtime` for runtime dependencies, `--gemfiles` for comparing Gemfiles or `--files` for comparing file lists:
 
