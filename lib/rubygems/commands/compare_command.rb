@@ -22,6 +22,22 @@ class Gem::Commands::CompareCommand < Gem::Command
       options[:param] = param
     end
 
+    add_option('-r', '--runtime', 'Compare only runtime dependencies') do
+      options[:param] = 'runtime_dependency'
+    end
+
+    add_option('-d', '--development', 'Compare only development dependencies') do
+      options[:param] = 'development_dependency'
+    end
+
+    add_option('-f', '--files', 'Compare only files for runtime') do
+      options[:param] = 'files'
+    end
+
+    add_option('-g', '--gemfiles', 'Compare only Gemfiles') do
+      options[:param] = 'gemfiles'
+    end
+
     add_option('-b', '--brief', 'Include only important changes in the report') do
       options[:log_all] = false
       options[:brief] = true
