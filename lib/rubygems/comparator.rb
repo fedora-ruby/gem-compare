@@ -1,6 +1,8 @@
 require 'tmpdir'
 require 'rbconfig'
 require 'rainbow'
+require 'curl'
+require 'json'
 require 'rubygems/package'
 require 'rubygems/dependency'
 require 'rubygems/spec_fetcher'
@@ -95,9 +97,10 @@ class Gem::Comparator
     # Return list of expanded versions
 
     def expand_versions(gem_name, versions)
-      info 'Expanding versions...'
+      info "Expanding versions #{versions}..."
       expanded = []
       versions.each do |version|
+        version = latest_gem_version(gem_name) if version == '_'
         if version =~ VERSION_REGEX
           expanded << version
           next
@@ -123,6 +126,19 @@ class Gem::Comparator
 
       info "Versions: #{versions}"
       versions
+    end
+
+    def remote_gem_versions(gem_name)
+      client = Curl::Easy.new
+      client.url = "https://rubygems.org/api/v1/versions/#{gem_name}.json"
+      client.follow_location = true
+      client.http_get
+      json = JSON.parse(client.body_str)
+      json.collect { |version| version['number'] }
+    end
+
+    def latest_gem_version(gem_name)
+      remote_gem_versions(gem_name).max
     end
 
     def gem_file_name(gem_name, version)

@@ -19,6 +19,8 @@ gemspec = Gem::Specification.new do |s|
                      'lib/**/*.rb', 'lib/**/**/*.rb', 'test/**/test*.rb']
   s.required_ruby_version     = '>= 2.0.0'
   s.required_rubygems_version = '>= 2.0.0'
+  s.add_runtime_dependency 'json'
+  s.add_runtime_dependency 'curl'
   s.add_runtime_dependency 'diffy'
   s.add_runtime_dependency 'rainbow'
   s.add_runtime_dependency 'gemnasium-parser'
