@@ -44,38 +44,35 @@ class Gem::Comparator
 
           vers = "#{packages[index-1].spec.version}->#{packages[index].spec.version}"
 
-          if previous == current && !all_same
+          deleted = previous - current
+          added = current - previous
+          same = current - added
+
+          report[param].set_header "#{different} #{param}:"
+
+          report[param][vers].section do
+            set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
+                       "#{Rainbow(packages[index].spec.version).blue}:"
+            nest('deleted').section do
+              set_header '* Deleted:'
+              puts deleted unless deleted.empty?
+            end
+
+            nest('added').section do
+              set_header '* Added:'
+              puts added unless added.empty?
+            end
+          end
+          report[param][vers]['changed'].set_header '* Changed:'
+          report = check_same_files(param, vers, index, same, report)
+          same_files = report[param][vers]['changed'].messages.empty?
+          all_same = false unless same_files
+
+          if previous == current && same_files && !all_same
             report[param][vers] << "#{Rainbow(packages[index-1].spec.version).blue}->" + \
                                    "#{Rainbow(packages[index].spec.version).blue}: No change"
           end
 
-          unless previous == current
-            deleted = previous - current
-            added = current - previous
-            same = current - added
-
-            if !added.empty? || !deleted.empty?
-              report[param].set_header "#{different} #{param}:"
-              all_same = false
-            end
-
-            report[param][vers].section do
-              set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
-                         "#{Rainbow(packages[index].spec.version).blue}:"
-              nest('deleted').section do
-                set_header '* Deleted:'
-                puts deleted unless deleted.empty?
-              end
-
-              nest('added').section do
-                set_header '* Added:'
-                puts added unless added.empty?
-              end
-            end
-
-            report[param][vers]['changed'].set_header '* Changed:'
-            report = check_same_files(param, vers, index, same, report)
-          end
         end
 
         if all_same && options[:log_all]
