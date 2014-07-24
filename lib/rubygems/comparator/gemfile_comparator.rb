@@ -11,9 +11,7 @@ class Gem::Comparator
   # To compare Gemfiles it needs to extract
   # gem packages to +options[:output]+
 
-  class GemfileComparator
-    include Gem::Comparator::Base
-
+  class GemfileComparator < Gem::Comparator::Base
     COMPARES = :packages
 
     ##
@@ -81,17 +79,17 @@ class Gem::Comparator
     end
 
     private
-    
+
       ##
       # Access @unpacked_gem_dirs hash that stores
       # paths to the unpacked gem dirs
-      # 
+      #
       # Keys of the hash are gem's versions
 
       def unpacked_gem_dirs
         @unpacked_gem_dirs ||= {}
       end
-    
+
       ##
       # Compare two Gemfiles for dependencies
       #
@@ -105,14 +103,14 @@ class Gem::Comparator
 
         split_dependencies(added, deleted)
       end
-    
+
       ##
       # Get the Gemfile dependencies from +gemfile+
 
       def gemfile_deps(gemfile)
         parse_gemfile(gemfile).dependencies
       end
-    
+
       ##
       # Parse +gemfile+ using Gemnasium::Parser
       #
@@ -121,7 +119,7 @@ class Gem::Comparator
       def parse_gemfile(gemfile)
         Gemnasium::Parser.gemfile File.open(gemfile).read
       end
-    
+
       ##
       # Find updated dependencies between +added+ and
       # +deleted+ deps and move them out to +updated+.

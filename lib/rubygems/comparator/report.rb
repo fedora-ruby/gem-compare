@@ -1,12 +1,22 @@
 class Gem::Comparator
   class Report
 
+    module Signs
+      def same
+        Rainbow('SAME').green.bright
+      end
+
+      def different
+        Rainbow('DIFFERENT').red.bright
+      end
+    end
+
     def self.new(name = 'main')
       Gem::Comparator::Report::NestedSection.new(name)
     end
 
     class NestedSection
-      include Gem::Comparator::Base
+      include Report::Signs
       include Gem::UserInteraction
 
       DEFAULT_INDENT = '  '
@@ -38,7 +48,9 @@ class Gem::Comparator
       alias_method :<<, :puts
 
       def nest(name)
-        @sections.each { |s| if s.name == name; return s; end }
+        @sections.each do |s|
+          return s if s.name == name
+        end
         NestedSection.new(name, self)
       end
       alias_method :[], :nest
@@ -51,16 +63,20 @@ class Gem::Comparator
         indent = DEFAULT_INDENT*@level
 
         if @header.empty?
-          @messages.map { |m| m.set_indent!(indent) } + nested_messages
+          @messages.map do |m|
+            m.set_indent!(indent)
+          end + nested_messages
         else
-          nested = @messages.map { |m| m.set_indent!(indent * 2) } + nested_messages
+          nested = @messages.map do |m|
+            m.set_indent!(indent * 2)
+          end + nested_messages
           return [] if nested.empty?
 
           @header.set_indent!(indent)
           nested.unshift(@header)
         end
       end
-      
+
       def lines(line_num)
         all_messages[line_num].data
       end
@@ -113,6 +129,8 @@ class Gem::Comparator
                     "#{@indent}#{@data}"
                   when Array
                     @indent + @data.join("\n#{@indent}")
+                  else
+                    "#{@indent}#{@data}"
                   end
         say printed
       end

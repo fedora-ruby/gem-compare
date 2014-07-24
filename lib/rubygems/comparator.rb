@@ -6,7 +6,7 @@ require 'json'
 require 'rubygems/package'
 require 'rubygems/dependency'
 require 'rubygems/spec_fetcher'
-require 'rubygems/comparator/base'
+require 'rubygems/comparator/utils'
 require 'rubygems/comparator/report'
 require 'rubygems/comparator/spec_comparator'
 require 'rubygems/comparator/file_list_comparator'
@@ -19,7 +19,7 @@ require 'rubygems/comparator/gemfile_comparator'
 # Gemfiles
 
 class Gem::Comparator
-  include Gem::Comparator::Base
+  include Gem::Comparator::Utils
   attr_accessor :options, :report
 
   VERSION = '0.0.2'

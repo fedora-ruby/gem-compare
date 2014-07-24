@@ -5,10 +5,8 @@ class Gem::Comparator
   ##
   # Gem::Comparator::SpecComparator can
   # compare values from the gem verions specs
-  
-  class SpecComparator
-    include Gem::Comparator::Base
 
+  class SpecComparator < Gem::Comparator::Base
     COMPARES = :specs
 
     ##
@@ -22,9 +20,9 @@ class Gem::Comparator
 
         # Are values the same?
         if same_values?(values) && options[:log_all]
-          v = value(values[0]) 
+          v = value(values[0])
           report[param].section do
-            set_header "#{same} #{param}:"
+            set_header "#{self.same} #{param}:"
 	        puts v
           end
         elsif !same_values?(values)
@@ -58,7 +56,7 @@ class Gem::Comparator
         when Gem::Requirement
           unless value.requirements.empty?
             r = value.requirements[0]
-            "#{r[0]} #{r[1].version} " 
+            "#{r[0]} #{r[1].version} "
           else
             '[]'
           end

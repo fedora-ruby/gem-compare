@@ -11,9 +11,7 @@ class Gem::Comparator
   # To compare the files it needs to extract
   # gem packages to +options[:output]+
 
-  class FileListComparator
-    include Gem::Comparator::Base
-
+  class FileListComparator < Gem::Comparator::Base
     COMPARES = :packages
 
     ##
@@ -90,7 +88,7 @@ class Gem::Comparator
       ##
       # Access @unpacked_gem_dirs hash that stores
       # paths to the unpacked gem dirs
-      # 
+      #
       # Keys of the hash are gem's versions
 
       def unpacked_gem_dirs
@@ -199,7 +197,7 @@ class Gem::Comparator
           ''
         end
       end
-    
+
       ##
       # Find if the file is now/or was executable
 
