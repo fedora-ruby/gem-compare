@@ -1,4 +1,23 @@
 class Gem::Comparator
+
+  ##
+  # Gem::Comparator::Report can nest sections and print only those that
+  # contain some messages.
+  #
+  # Usage:
+  #   report = Gem::Comparator::Report.new
+  #   report['section1'] << "Message 1"
+  #   report['section1']['subsection1'].set_header 'Message 2 Header'
+  #   report['section1']['subsection1'] << "Message 2" if false
+  #   report['section1'].section
+  #     nest('subsection2').section
+  #       puts "Message 3"
+  #     end
+  #   end
+  #   report.print
+  #
+  # This won't print Message 2 nor its header saving a lot of if/else.
+
   class Report
 
     module Signs
