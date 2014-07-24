@@ -221,12 +221,10 @@ class Gem::Comparator
       # Return the first line of the +file+
 
       def first_line(file)
-        begin
-          File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
-        rescue
-          info "#{file} is binary, skipping shebang check"
-          ''
-        end
+        File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
+      rescue
+        info "#{file} is binary, skipping shebang check"
+        ''
       end
 
       ##
