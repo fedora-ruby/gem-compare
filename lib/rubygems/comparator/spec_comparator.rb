@@ -7,7 +7,6 @@ class Gem::Comparator
   # compare values from the gem verions specs
 
   class SpecComparator < Gem::Comparator::Base
-    COMPARES = :specs
 
     ##
     # Compare common fields in spec

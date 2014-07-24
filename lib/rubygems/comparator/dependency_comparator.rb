@@ -8,7 +8,6 @@ class Gem::Comparator
   # based on the given Gem::Specification objects
 
   class DependencyComparator < Gem::Comparator::Base
-    COMPARES = :specs
 
     ##
     # Compare dependencies in given +specs+ and

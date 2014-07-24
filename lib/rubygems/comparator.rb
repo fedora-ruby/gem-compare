@@ -77,7 +77,7 @@ class Gem::Comparator
 
     comparators.each do |c|
       comparator = c.new
-      cmp = (c::COMPARES == :packages) ? gem_packages.values : gem_specs.values
+      cmp = (comparator.compares == :packages) ? gem_packages.values : gem_specs.values
       @report = comparator.compare(cmp, @report, @options)
     end
 

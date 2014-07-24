@@ -12,7 +12,10 @@ class Gem::Comparator
   # gem packages to +options[:output]+
 
   class GemfileComparator < Gem::Comparator::Base
-    COMPARES = :packages
+
+    def initialize
+      expect(:packages)
+    end
 
     ##
     # Compare Gemfiles using gem's +packages+
