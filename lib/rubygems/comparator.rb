@@ -61,11 +61,14 @@ class Gem::Comparator
     error 'Only one version specified. Specify at lease two versions.' \
       if versions.size == 1
 
+    # This should match the final versions that has been compared
+    @compared_versions = versions
+
     versions.each do |version|
       download_gems? ? download_package(gem_name, version) : download_specification(gem_name, version)
     end
 
-    @report.set_header "Compared versions: #{versions}"
+    @report.set_header "Compared versions: #{@compared_versions}"
 
     comparators = [SpecComparator,
                    FileListComparator,
@@ -124,7 +127,7 @@ class Gem::Comparator
 
       error 'No versions found.' if versions.size == 0
 
-      info "Versions: #{versions}"
+      info "Expanded versions: #{versions}"
       versions
     end
 
@@ -153,6 +156,7 @@ class Gem::Comparator
       return gem_packages["#{gem_file}"] if gem_packages["#{gem_file}"]
 
       spec, source = download_specification(gem_name, version)
+      gem_file = gem_file_name(gem_name, spec.version.to_s)
 
       Dir.chdir @options[:output] do
         source.download spec
@@ -176,9 +180,27 @@ class Gem::Comparator
       specs_and_sources, _errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
       spec, source = specs_and_sources.max_by { |s,| s.version }
       error "Gem #{gem_name} in #{version} doesn't exist." if spec.nil?
+
+      fix_comparing_version(version, spec.version.to_s)
+      gem_file = gem_file_name(gem_name, spec.version.to_s)
+
       gem_specs["#{gem_file}"] = spec
 
       [spec, source]
+    end
+
+    ##
+    # Ensure the right version is referenced
+
+    def fix_comparing_version(version, spec_version)
+      if spec_version != version
+        @compared_versions.each do |v|
+          if v == version
+            @compared_versions[@compared_versions.index(version)] = spec_version
+            return
+          end
+        end
+      end
     end
 
     def find_downloaded_gem(gem_file)
