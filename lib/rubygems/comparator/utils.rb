@@ -9,13 +9,37 @@ class Gem::Comparator
     OPERATORS = ['=', '!=', '>', '<', '>=', '<=', '~>']
     VERSION_REGEX = /\A(\d+\.){0,}\d+(\.[a-zA-Z]+\d{0,1}){0,1}\z/
     SHEBANG_REGEX = /\A#!.*/
-    SPEC_PARAMS = %w[ author authors name platform require_paths rubygems_version summary
-                      license licenses  bindir cert_chain description email executables
-                      extensions homepage metadata post_install_message rdoc_options
-                      required_ruby_version required_rubygems_version requirements
-                      signing_key has_rdoc date version ].sort
-    SPEC_FILES_PARAMS = %w[ files test_files extra_rdoc_files ]
-    DEPENDENCY_PARAMS = %w[ runtime_dependency development_dependency ]
+    SPEC_PARAMS = %w[ author
+                      authors
+                      bindir
+                      cert_chain
+                      date
+                      description
+                      email
+                      executables
+                      extensions
+                      has_rdoc
+                      homepage
+                      license
+                      licenses
+                      metadata
+                      name
+                      platform
+                      post_install_message
+                      rdoc_options
+                      require_paths
+                      required_ruby_version
+                      required_rubygems_version
+                      requirements
+                      rubygems_version
+                      signing_key
+                      summary
+                      version ]
+    SPEC_FILES_PARAMS = %w[ files
+                            test_files
+                            extra_rdoc_files ]
+    DEPENDENCY_PARAMS = %w[ runtime_dependency
+                            development_dependency ]
     GEMFILE_PARAMS = %w[ gemfiles ]
 
     private
