@@ -71,7 +71,7 @@ class Gem::Comparator
             end
           end
           report[param][vers]['changed'].set_header '* Changed:'
-          report = check_same_files(param, vers, index, same, report)
+          report = check_same_files(param, vers, index, same, report, options[:brief])
           same_files = report[param][vers]['changed'].messages.empty?
           all_same = false unless same_files
 
@@ -104,7 +104,7 @@ class Gem::Comparator
         @unpacked_gem_dirs ||= {}
       end
 
-      def check_same_files(param, vers, index, files, report)
+      def check_same_files(param, vers, index, files, report, brief_mode)
         files.each do |file|
           prev_file = File.join(unpacked_gem_dirs[@packages[index-1].spec.version], file)
           curr_file = File.join(unpacked_gem_dirs[@packages[index].spec.version], file)
@@ -117,7 +117,7 @@ class Gem::Comparator
                     executables_changed(prev_file, curr_file),
                     shebangs_changed(prev_file, curr_file)
 
-          unless (line_changes.empty? && changes.join.empty?)
+          if(!changes.join.empty? || (!brief_mode && !line_changes.empty?))
             report[param][vers]['changed'] << \
               "#{file} #{line_changes}"
           end
