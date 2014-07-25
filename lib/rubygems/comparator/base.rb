@@ -41,11 +41,5 @@ class Gem::Comparator
         gem_dir
       end
 
-      def check_diff_command_is_installed
-        IO.popen('diff --version')
-      rescue Exception
-        raise DiffCommandMissing, \
-          'Calling `diff` command failed. Do you have it installed?'
-      end
   end
 end

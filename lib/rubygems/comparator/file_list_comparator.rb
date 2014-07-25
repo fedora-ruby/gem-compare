@@ -15,6 +15,13 @@ class Gem::Comparator
 
     def initialize
       expect(:packages)
+
+      # We need diff
+      begin
+        IO.popen('diff --version')
+      rescue Exception
+        error('Calling `diff` command failed. Do you have it installed?')
+      end
     end
 
     ##
@@ -26,7 +33,6 @@ class Gem::Comparator
 
     def compare(packages, report, options = {})
       info 'Checking file lists...'
-      check_diff_command_is_installed
 
       @packages = packages
 
