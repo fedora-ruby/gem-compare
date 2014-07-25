@@ -1,7 +1,10 @@
 require 'rubygems/command'
+require 'rubygems/version_option'
 require 'rubygems/comparator'
 
 class Gem::Commands::CompareCommand < Gem::Command
+  include Gem::VersionOption
+
   def initialize
     super 'compare', 'Compare gem\'s versions and generate a report of changes',
       :output => Dir.pwd
@@ -17,6 +20,9 @@ class Gem::Commands::CompareCommand < Gem::Command
     add_option('-n', '--no-color', 'Do not colorize output') do
       options[:no_color] = true
     end
+
+    # Speficy the platform using --platform=PLATFORM
+    add_platform_option
 
     add_option('-pPARAM', '--param=PARAM', 'Compare only a given paramater') do |param, options|
       options[:param] = param
