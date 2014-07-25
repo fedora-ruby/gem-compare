@@ -134,6 +134,15 @@ Compared versions: ["0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2", "0.2.3
             rspec from: [">= 0"] to: ["= 2.14.1"]
 ```
 
+#### Platforms
+
+*gem-compare* supports querying different gem platforms via standard `--platform` option. To compare
+nokogiri gem on different platform run:
+```
+$ gem compare nokogiri 1.5.6 1.6.1 -ak --platform java # for JRuby
+$ gem compare nokogiri 1.5.6 1.6.1 -ak --platform x86-mingw32 # on Windows
+```
+
 ### Supported options
 
 To see all possible options run:
