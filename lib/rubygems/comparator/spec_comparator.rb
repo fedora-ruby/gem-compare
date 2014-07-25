@@ -59,6 +59,8 @@ class Gem::Comparator
           else
             '[]'
           end
+        when Gem::Platform
+          value.to_s
         when String
           return value unless value.empty?
           ''
