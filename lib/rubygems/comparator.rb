@@ -73,7 +73,9 @@ class Gem::Comparator
     @compared_versions = versions
 
     versions.each do |version|
-      download_gems? ? download_package(gem_name, version) : download_specification(gem_name, version)
+      download_gems? ?
+        get_package(gem_name, version) :
+        get_specification(gem_name, version)
     end
 
     @report.set_header "Compared versions: #{@compared_versions}"
@@ -160,14 +162,18 @@ class Gem::Comparator
       end
     end
 
-    def download_package(gem_name, version)
+    def get_package(gem_name, version)
       gem_file = gem_file_name(gem_name, version)
       return gem_packages["#{gem_file}"] if gem_packages["#{gem_file}"]
 
       find_downloaded_gem(gem_file)
       return gem_packages["#{gem_file}"] if gem_packages["#{gem_file}"]
 
-      spec, source = download_specification(gem_name, version)
+      download_package(gem_name, version)
+    end
+
+    def download_package(gem_name, version)
+      spec, source = get_specification(gem_name, version)
       gem_file = gem_file_name(gem_name, spec.version.to_s)
 
       Dir.chdir @options[:output] do
@@ -181,13 +187,17 @@ class Gem::Comparator
       package
     end
 
-    def download_specification(gem_name, version)
+    def get_specification(gem_name, version)
       gem_file = gem_file_name(gem_name, version)
       return gem_specs["#{gem_file}"] if gem_specs["#{gem_file}"]
 
       find_downloaded_gem(gem_file)
       return gem_specs["#{gem_file}"] if gem_specs["#{gem_file}"]
 
+      download_specification(gem_name, version)
+    end
+
+    def download_specification(gem_name, version)
       dep = Gem::Dependency.new gem_name, version
       specs_and_sources, _errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
       spec, source = specs_and_sources.max_by { |s,| s.version }
