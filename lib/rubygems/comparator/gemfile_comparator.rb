@@ -40,29 +40,21 @@ class Gem::Comparator
         report['gemfiles'][vers].set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
                                             "#{Rainbow(packages[index].spec.version).blue}:"
 
-        if File.exist?(prev_gemfile) && File.exist?(curr_gemfile)
-          added, deleted, updated = compare_gemfiles(prev_gemfile, curr_gemfile)
+        added, deleted, updated = compare_gemfiles(prev_gemfile, curr_gemfile)
 
-          report['gemfiles'][vers]['added'].section do
-            set_header '* Added:'
-            puts added.map { |x| "#{x.name} #{x.requirements_list}" }  unless added.empty?
-          end
-          report['gemfiles'][vers]['deleted'].section do
-            set_header '* Deleted'
-            puts deleted.map { |x| "#{x.name} #{x.requirements_list}" }  unless deleted.empty?
-          end
-          report['gemfiles'][vers]['updated'].section do
-            set_header '* Updated'
-            puts updated  unless updated.empty?
-          end
-          all_same = false if !added.empty? || !deleted.empty?
-        elsif File.exist?(prev_gemfile)
-          report['gemfiles'][vers] << "Gemfile removed"
-          all_same = false
-        elsif File.exist?(curr_gemfile)
-          report['gemfiles'][vers] << "Gemfile added"
-          all_same = false
+        report['gemfiles'][vers]['added'].section do
+          set_header '* Added:'
+          puts added.map { |x| "#{x.name} #{x.requirements_list}" }  unless added.empty?
         end
+        report['gemfiles'][vers]['deleted'].section do
+          set_header '* Deleted'
+          puts deleted.map { |x| "#{x.name} #{x.requirements_list}" }  unless deleted.empty?
+        end
+        report['gemfiles'][vers]['updated'].section do
+          set_header '* Updated'
+          puts updated  unless updated.empty?
+        end
+        all_same = false if !added.empty? || !deleted.empty?
       end
       if all_same && options[:log_all]
         report['gemfiles'].set_header "#{same} Gemfiles:"
@@ -111,7 +103,11 @@ class Gem::Comparator
       # Get the Gemfile dependencies from +gemfile+
 
       def gemfile_deps(gemfile)
-        parse_gemfile(gemfile).dependencies
+        if File.exist?(gemfile)
+          parse_gemfile(gemfile).dependencies
+        else
+          []
+        end
       end
 
       ##
