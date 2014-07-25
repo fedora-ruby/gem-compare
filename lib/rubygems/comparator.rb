@@ -42,6 +42,14 @@ class Gem::Comparator
       Rainbow.enabled = false
     end
 
+    # Let's override platforms with the latest one if
+    # a platform has been specified via --platform
+    if options[:added_platform]
+      Gem.platforms = [Gem.platforms.last]
+      options[:platform] = Gem.platforms.last.to_s
+      info "Overriding platform to: #{options[:platform]}"
+    end
+
     @options = options
 
     # Results from the comparison
@@ -145,7 +153,11 @@ class Gem::Comparator
     end
 
     def gem_file_name(gem_name, version)
-      "#{gem_name}-#{version}.gem"
+      if @options[:platform]
+        "#{gem_name}-#{version}-#{@options[:platform]}.gem"
+      else
+        "#{gem_name}-#{version}.gem"
+      end
     end
 
     def download_package(gem_name, version)
