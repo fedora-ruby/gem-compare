@@ -30,6 +30,8 @@ class Gem::Comparator
   # Creates temporal directory if the gem files shouldn't be kept
 
   def initialize(options)
+    info "gem-compare in #{VERSION}"
+
     unless options[:keep_all]
       options[:output] = Dir.mktmpdir
     end
@@ -62,7 +64,6 @@ class Gem::Comparator
   # Compares file lists, requirements, other meta data
 
   def compare_versions(gem_name, versions)
-    info "gem-compare in #{VERSION}"
     # Expand versions (<=, >=, ~>) and sort them
     versions = expand_versions(gem_name, versions)
 
