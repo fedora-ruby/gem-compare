@@ -13,8 +13,10 @@ class Gem::Comparator
 
     def compare(specs, report, options = {})
       info 'Checking spec parameters...'
+      p = options[:param]
+      b = options[:brief]
 
-      filter_params(SPEC_PARAMS, options[:param]).each do |param|
+      filter_params(SPEC_PARAMS, p, b).each do |param|
         values = values_from_specs(param, specs)
 
         # Are values the same?

@@ -42,6 +42,14 @@ class Gem::Comparator
                             development_dependency ]
     GEMFILE_PARAMS = %w[ gemfiles ]
 
+    # Duplicates or obvious changes
+    FILTER_WHEN_BRIEF = %w[ author
+                            date
+                            license
+                            platform
+                            rubygems_version
+                            version ]
+
     private
 
       def param_exists?(param)
@@ -51,7 +59,7 @@ class Gem::Comparator
         (GEMFILE_PARAMS.include? param)
       end
 
-      def filter_params(params, param)
+      def filter_params(params, param, brief_mode = false)
         if param
           if params.include? param
             return [param]
@@ -59,8 +67,15 @@ class Gem::Comparator
             return []
           end
         end
+        if brief_mode
+          filter_for_brief_mode(params)
+        else
+          params
+        end
+      end
 
-        params
+      def filter_for_brief_mode(params)
+        params.delete_if{ |p| FILTER_WHEN_BRIEF.include?(p) }
       end
 
       ##
