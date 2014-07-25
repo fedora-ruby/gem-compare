@@ -62,7 +62,12 @@ class Gem::Comparator
       end
 
       def puts(message)
-        @messages << Entry.new(message)
+        case message
+        when String, Array
+          @messages << Entry.new(message) unless message.empty?
+        else
+          @messages << Entry.new(message) unless message
+        end
       end
       alias_method :<<, :puts
 
