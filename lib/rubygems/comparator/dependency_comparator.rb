@@ -22,12 +22,11 @@ class Gem::Comparator
       filter_params(DEPENDENCY_PARAMS, options[:param]).each do |param|
         all_same = true
         type = param.gsub('_dependency', '').to_sym
-
         specs.each_with_index do |s, index|
           next if index == 0
 
-          prev_deps = specs[index-1].dependencies.keep_if { |d| d.type == type }
-          curr_deps = specs[index].dependencies.keep_if { |d| d.type == type }
+          prev_deps = specs[index-1].dependencies.select { |d| d.type == type }
+          curr_deps = specs[index].dependencies.select { |d| d.type == type }
           added, deleted, updated = resolve_dependencies(prev_deps, curr_deps)
 
           if (!deleted.empty? || !added.empty? || !updated.empty?)
@@ -57,13 +56,14 @@ class Gem::Comparator
         end
         if all_same && options[:log_all]
           report[param].set_header "#{same} #{type} dependencies:" if options[:log_all]
-          deps = specs[0].dependencies.keep_if{ |d| d.type == type }.map{ |d| "#{d.name}: #{d.requirements_list}" }
+          deps = specs[0].dependencies.select{ |d| d.type == type }.map{ |d| "#{d.name}: #{d.requirements_list}" }
           deps = '[]' if deps.empty?
           report[param] << deps
         elsif !all_same
           report[param].set_header "#{different} #{type} dependencies:"
         end
       end
+
       report
     end
 

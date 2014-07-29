@@ -24,6 +24,7 @@ class TestDependencyComparator < TestGemComparator
     assert_equal [], @report['development_dependency']['0.0.1->0.0.2']['updated'].messages
     assert_equal [], @report['development_dependency']['0.0.2->0.0.3']['added'].messages
     assert_equal [], @report['development_dependency']['0.0.2->0.0.3']['deleted'].messages
-    assert_equal [], @report['development_dependency']['0.0.2->0.0.3']['updated'].messages
+    assert_equal 'bundler from: ["~> 1.6"] to: ["~> 1.0"]', @report['development_dependency']['0.0.2->0.0.3']['updated'].lines(1)[0]
+    assert_equal 'rake from: [">= 0"] to: [">= 10.0.0"]', @report['development_dependency']['0.0.2->0.0.3']['updated'].lines(1)[1]
   end
 end
