@@ -1,7 +1,7 @@
 require 'tmpdir'
 require 'rbconfig'
 require 'rainbow'
-require 'curl'
+require 'curb'
 require 'json'
 require 'rubygems/package'
 require 'rubygems/dependency'
