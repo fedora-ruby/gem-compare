@@ -148,11 +148,13 @@ class Gem::Comparator
       client.follow_location = true
       client.http_get
       json = JSON.parse(client.body_str)
-      json.collect { |version| version['number'] }
+      gems = json.collect { |version| version['number'] }
+      info "Upstream versions: #{gems}"
+      gems
     end
 
     def latest_gem_version(gem_name)
-      remote_gem_versions(gem_name).max
+      remote_gem_versions(gem_name).map{ |v| Gem::Version.new v }.max.to_s
     end
 
     def gem_file_name(gem_name, version)
