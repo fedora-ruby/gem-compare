@@ -122,16 +122,16 @@ class Gem::Comparator
     # Returns a unique list of directories and top level files
     # out of an array of files
 
-    def self.collect_dirs(file_list)
-      dirs_and_files = []
+    def self.dirs_of_files(file_list)
+      dirs_of_files = []
       file_list.each do |file|
         unless Pathname.new(file).dirname.to_s == '.'
-          dirs_and_files << "#{Pathname.new(file).dirname.to_s}/"
+          dirs_of_files << "#{Pathname.new(file).dirname.to_s}/"
         else
-          dirs_and_files << file
+          dirs_of_files << file
         end
       end
-      dirs_and_files.uniq
+      dirs_of_files.uniq
     end
 
   end

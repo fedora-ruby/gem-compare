@@ -116,8 +116,8 @@ class Gem::Comparator
       # For top level (.) it compares files themselves
 
       def dir_changed(previous, current)
-        prev_dirs = DirUtils.collect_dirs(previous)
-        curr_dirs = DirUtils.collect_dirs(current)
+        prev_dirs = DirUtils.dirs_of_files(previous)
+        curr_dirs = DirUtils.dirs_of_files(current)
         deleted = prev_dirs - curr_dirs
         added = curr_dirs - prev_dirs
         [deleted, added]
