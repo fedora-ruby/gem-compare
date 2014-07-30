@@ -133,6 +133,5 @@ class Gem::Comparator
       end
       dirs_of_files.uniq
     end
-
   end
 end

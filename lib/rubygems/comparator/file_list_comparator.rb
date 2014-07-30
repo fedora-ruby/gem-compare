@@ -118,9 +118,16 @@ class Gem::Comparator
       def dir_changed(previous, current)
         prev_dirs = DirUtils.dirs_of_files(previous)
         curr_dirs = DirUtils.dirs_of_files(current)
-        deleted = prev_dirs - curr_dirs
-        added = curr_dirs - prev_dirs
+        deleted = remove_subdirs(prev_dirs - curr_dirs)
+        added = remove_subdirs(curr_dirs - prev_dirs)
         [deleted, added]
+      end
+
+      def remove_subdirs(dirs)
+        dirs.dup.sort_by(&:length).reverse.each do |dir|
+          dirs.delete_if{ |d| d =~ /#{dir}.+/ }
+        end
+        dirs
       end
 
       def check_same_files(param, vers, index, files, report, brief_mode)
