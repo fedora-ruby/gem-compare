@@ -116,23 +116,11 @@ class Gem::Comparator
       # For top level (.) it compares files themselves
 
       def dir_changed(previous, current)
-        prev_dirs = collect_dirs(previous)
-        curr_dirs = collect_dirs(current)
+        prev_dirs = DirUtils.collect_dirs(previous)
+        curr_dirs = DirUtils.collect_dirs(current)
         deleted = prev_dirs - curr_dirs
         added = curr_dirs - prev_dirs
         [deleted, added]
-      end
-
-      def collect_dirs(file_list)
-        dirs_and_files = []
-        file_list.each do |file|
-          unless Pathname.new(file).dirname.to_s == '.'
-            dirs_and_files << "#{Pathname.new(file).dirname.to_s}/"
-          else
-            dirs_and_files << file
-          end
-        end
-        dirs_and_files.uniq
       end
 
       def check_same_files(param, vers, index, files, report, brief_mode)
