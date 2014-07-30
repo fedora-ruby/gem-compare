@@ -255,29 +255,13 @@ class Gem::Comparator
       end
 
       ##
-      # Return the first line of the +file+
-
-      def first_line(file)
-        File.open(file) { |f| f.readline }.gsub(/(.*)\n/, '\1')
-      rescue
-        info "#{file} is binary, skipping shebang check"
-        ''
-      end
-
-      ##
       # Find if the shabang of the file has been changed
 
       def shebangs_changed(prev_file, curr_file)
-        first_lines = {}
+        return '' if DirUtils.files_same_first_line?(prev_file, curr_file)
 
-        [prev_file, curr_file].each do |file|
-          first_lines[file] = first_line(file)
-        end
-
-        return '' if first_lines[prev_file] == first_lines[curr_file]
-
-        prev_has_shebang = (first_lines[prev_file] =~ SHEBANG_REGEX)
-        curr_has_shebang = (first_lines[curr_file] =~ SHEBANG_REGEX)
+        prev_has_shebang = DirUtils.file_has_shebang? prev_file
+        curr_has_shebang = DirUtils.file_has_shebang? curr_file
 
         if prev_has_shebang && !curr_has_shebang
             "  (!) Shebang probably lost: #{first_lines[prev_file]}"
@@ -290,6 +274,5 @@ class Gem::Comparator
             ''
         end
      end
-
   end
 end

@@ -8,7 +8,6 @@ class Gem::Comparator
     DEFAULT_INDENT = SPACE*7
     OPERATORS = ['=', '!=', '>', '<', '>=', '<=', '~>']
     VERSION_REGEX = /\A(\d+\.){0,}\d+(\.[a-zA-Z]+\d{0,1}){0,1}\z/
-    SHEBANG_REGEX = /\A#!.*/
     SPEC_PARAMS = %w[ author
                       authors
                       bindir
@@ -93,5 +92,26 @@ class Gem::Comparator
         say Rainbow("ERROR: #{msg}").red
         exit 1
       end
+  end
+
+  module DirUtils
+
+    SHEBANG_REGEX = /\A#!.*/
+
+    attr_accessor :files_first_line
+
+    def self.file_first_line(file)
+      @files_first_line[file] ||=
+        File.open(file){ |f| f.readline }.gsub(/(.*)\n/, '\1')
+    rescue
+    end
+
+    def self.file_has_shebang?(file)
+      file_first_line(file) =~ SHEBANG_REGEX
+    end
+
+    def self.files_same_first_line?(file1, file2)
+      file_first_line(file1) == file_first_line(file2)
+    end
   end
 end
