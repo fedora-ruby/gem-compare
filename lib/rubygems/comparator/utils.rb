@@ -114,6 +114,10 @@ class Gem::Comparator
       file_first_line(file1) == file_first_line(file2)
     end
 
+    def self.file_permissions(file)
+      sprintf("%o", File.stat(file).mode)
+    end
+
     ##
     # Returns a unique list of directories and top level files
     # out of an array of files

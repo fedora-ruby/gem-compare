@@ -205,18 +205,11 @@ class Gem::Comparator
       end
 
       ##
-      # Get file's permission
-
-      def file_permissions(file)
-        sprintf("%o", File.stat(file).mode)
-      end
-
-      ##
       # Find and return permission changes between files
 
       def permission_changed(prev_file, curr_file)
-        prev_permissions = file_permissions(prev_file)
-        curr_permissions = file_permissions(curr_file)
+        prev_permissions = DirUtils.file_permissions(prev_file)
+        curr_permissions = DirUtils.file_permissions(curr_file)
 
         if prev_permissions != curr_permissions
           "  (!) New permissions: " +
