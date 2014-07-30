@@ -1,4 +1,5 @@
 require 'diffy'
+require 'pathname'
 require 'rubygems/comparator/base'
 
 class Gem::Comparator
@@ -55,6 +56,10 @@ class Gem::Comparator
           added = current - previous
           same = current - added
 
+          if options[:brief]
+            deleted, added = dir_changed(previous, current)
+          end
+
           report[param].set_header "#{different} #{param}:"
 
           report[param][vers].section do
@@ -102,6 +107,32 @@ class Gem::Comparator
 
       def unpacked_gem_dirs
         @unpacked_gem_dirs ||= {}
+      end
+
+      ##
+      # This returns [deleted, added] directories between
+      # +previous+ and +current+ file lists
+      #
+      # For top level (.) it compares files themselves
+
+      def dir_changed(previous, current)
+        prev_dirs = collect_dirs(previous)
+        curr_dirs = collect_dirs(current)
+        deleted = prev_dirs - curr_dirs
+        added = curr_dirs - prev_dirs
+        [deleted, added]
+      end
+
+      def collect_dirs(file_list)
+        dirs_and_files = []
+        file_list.each do |file|
+          unless Pathname.new(file).dirname.to_s == '.'
+            dirs_and_files << "#{Pathname.new(file).dirname.to_s}/"
+          else
+            dirs_and_files << file
+          end
+        end
+        dirs_and_files.uniq
       end
 
       def check_same_files(param, vers, index, files, report, brief_mode)
