@@ -19,8 +19,6 @@ class Gem::Comparator
       expect(:specs)
     end
 
-    class DiffCommandMissing < StandardError; end
-
     private
 
       def expect(what)
