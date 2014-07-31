@@ -38,4 +38,11 @@ module DirUtils
     end
     dirs_of_files.uniq
   end
+
+  def self.remove_subdirs(dirs)
+    dirs.dup.sort_by(&:length).reverse.each do |dir|
+      dirs.delete_if{ |d| d =~ /#{dir}.+/ }
+    end
+    dirs
+  end
 end
