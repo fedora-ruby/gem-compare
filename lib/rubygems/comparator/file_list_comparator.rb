@@ -57,8 +57,10 @@ class Gem::Comparator
           same = current - added
 
           if options[:brief]
-            deleted, added = dir_changed(previous, current)
+            deleted, dirs_added = dir_changed(previous, current)
           end
+          # Add information about permissions, shebangs etc.
+          added = check_added_files(param, vers, index, added, report, options[:brief])
 
           report[param].set_header "#{different} #{param}:"
 
@@ -72,7 +74,7 @@ class Gem::Comparator
 
             nest('added').section do
               set_header '* Added:'
-              puts added unless added.empty?
+              puts dirs_added if options[:brief]
             end
           end
           report[param][vers]['changed'].set_header '* Changed:'
@@ -121,6 +123,26 @@ class Gem::Comparator
         deleted = DirUtils.remove_subdirs(prev_dirs - curr_dirs)
         added = DirUtils.remove_subdirs(curr_dirs - prev_dirs)
         [deleted, added]
+      end
+
+      def check_added_files(param, vers, index, files, report, brief_mode)
+        files.each do |file|
+          added_file = File.join(unpacked_gem_dirs[@packages[index].spec.version], file)
+
+          #line_changes = lines_changed(prev_file, curr_file)
+
+          changes = file_permissions(added_file),
+                    file_executable(added_file),
+                    file_shebang(added_file)
+
+          if(!changes.join.empty? || !brief_mode)
+            report[param][vers]['added'] << "#{file}"
+          end
+
+          changes.each do |change|
+            report[param][vers]['added'] << change unless change.empty?
+          end
+        end
       end
 
       def check_same_files(param, vers, index, files, report, brief_mode)
@@ -206,6 +228,18 @@ class Gem::Comparator
         end
       end
 
+      def file_permissions(file)
+        file_permissions = DirUtils.file_permissions(file)
+
+        if file_permissions != '100644'
+          unless (DirUtils.gem_bin_file?(file) && file_permissions == '100755')
+            "  (!) Unexpected permissions: #{file_permissions}"
+          end
+        else
+          ''
+        end
+      end
+
       ##
       # Find if the file is now/or was executable
 
@@ -222,6 +256,18 @@ class Gem::Comparator
         end
       end
 
+      def file_executable(file)
+        file_executable = File.stat(file).executable?
+
+        if file_executable && !DirUtils.gem_bin_file?(file)
+          "  (!) File is executable"
+        elsif !file_executable && DirUtils.gem_bin_file?(file)
+          "  (!) File is not executable"
+        else
+          ''
+        end
+      end
+
       ##
       # Find if the shabang of the file has been changed
 
@@ -232,15 +278,25 @@ class Gem::Comparator
         curr_has_shebang = DirUtils.file_has_shebang? curr_file
 
         if prev_has_shebang && !curr_has_shebang
-            "  (!) Shebang probably lost: #{first_lines[prev_file]}"
+            "  (!) Shebang probably lost: #{DirUtils.file_first_line(prev_file)}"
         elsif !prev_has_shebang && curr_has_shebang
-            "  (!) Shebang probably added: #{first_lines[curr_file]}"
+            "  (!) Shebang probably added: #{DirUtils.file_first_line(curr_file)}"
         elsif prev_has_shebang && curr_has_shebang
             "  (!) Shebang probably changed: " +
-            "#{first_lines[prev_file]} -> #{first_lines[curr_file]}"
+            "#{first_lines[prev_file]} -> #{DirUtils.file_first_line(curr_file)}"
         else
             ''
         end
+     end
+
+     def file_shebang(file)
+       file_has_shebang = DirUtils.file_has_shebang? file
+
+       if file_has_shebang
+         " (!) Shebang found: #{DirUtils.file_first_line(file)}"
+       else
+         ''
+       end
      end
   end
 end

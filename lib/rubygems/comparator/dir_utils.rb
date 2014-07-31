@@ -23,6 +23,10 @@ module DirUtils
     sprintf("%o", File.stat(file).mode)
   end
 
+  def self.gem_bin_file?(file)
+    file =~ /\Abin\/.*/
+  end
+
   ##
   # Returns a unique list of directories and top level files
   # out of an array of files
