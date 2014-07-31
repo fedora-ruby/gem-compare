@@ -19,12 +19,11 @@ class Gem::Comparator
       filter_params(SPEC_PARAMS, p, b).each do |param|
         values = values_from_specs(param, specs)
 
-        # Are values the same?
         if same_values?(values) && options[:log_all]
           v = value(values[0])
           report[param].section do
             set_header "#{self.same} #{param}:"
-	        puts v
+	    puts v
           end
         elsif !same_values?(values)
           report[param].set_header "#{different} #{param}:"
@@ -38,19 +37,6 @@ class Gem::Comparator
     end
 
     private
-
-      def values_from_specs(param, specs)
-        values = []
-        specs.each do |s|
-          if s.respond_to? :"#{param}"
-            values << s.send(:"#{param}")
-          else
-            warn "#{s.full_name} does not respond to " +
-                 "#{param}, skipping check"
-          end
-        end
-        values
-      end
 
       def value(value)
         case value

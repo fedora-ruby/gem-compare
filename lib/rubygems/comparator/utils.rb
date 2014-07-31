@@ -77,8 +77,24 @@ class Gem::Comparator
         params.delete_if{ |p| FILTER_WHEN_BRIEF.include?(p) }
       end
 
-      ##
-      # Print info only in verbose mode
+      def values_from_specs(param, specs)
+        values = []
+        specs.each do |s|
+         val = value_from_spec(param, s)
+         values << val if val
+        end
+        values
+      end
+
+      def value_from_spec(param, spec)
+        if spec.respond_to? :"#{param}"
+          spec.send(:"#{param}")
+        else
+          warn "#{spec.full_name} does not respond to " +
+               "#{param}, skipping check"
+          nil
+        end
+      end
 
       def info(msg)
         say msg if Gem.configuration.really_verbose

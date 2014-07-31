@@ -174,19 +174,6 @@ class Gem::Comparator
       end
 
       ##
-      # Return +value+ in the given +spec+
-
-      def value_from_spec(param, spec)
-        if spec.respond_to? :"#{param}"
-          spec.send(:"#{param}")
-        else
-          warn "#{spec.full_name} does not respond to " +
-               "#{param}, skipping check"
-          nil
-        end
-      end
-
-      ##
       # Return changes between files:
       # + for line added
       # - for line deleted
