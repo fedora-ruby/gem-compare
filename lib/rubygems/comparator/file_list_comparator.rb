@@ -1,6 +1,6 @@
 require 'diffy'
-require 'pathname'
 require 'rubygems/comparator/base'
+require 'rubygems/comparator/dir_utils'
 
 class Gem::Comparator
 
