@@ -1,6 +1,7 @@
 require 'diffy'
 require 'rubygems/comparator/base'
 require 'rubygems/comparator/dir_utils'
+require 'rubygems/comparator/monitor'
 
 class Gem::Comparator
 
@@ -131,9 +132,9 @@ class Gem::Comparator
 
           #line_changes = lines_changed(prev_file, curr_file)
 
-          changes = file_permissions(added_file),
-                    file_executable(added_file),
-                    file_shebang(added_file)
+          changes = Monitor.new_file_permissions(added_file),
+                    Monitor.new_file_executability(added_file),
+                    Monitor.new_file_shebang(added_file)
 
           if(!changes.join.empty? || !brief_mode)
             report[param][vers]['added'] << "#{file}"
@@ -152,11 +153,11 @@ class Gem::Comparator
 
           next unless check_files([prev_file, curr_file])
 
-          line_changes = lines_changed(prev_file, curr_file)
+          line_changes = Monitor.lines_changed(prev_file, curr_file)
 
-          changes = permission_changed(prev_file, curr_file),
-                    executables_changed(prev_file, curr_file),
-                    shebangs_changed(prev_file, curr_file)
+          changes = Monitor.files_permissions_changes(prev_file, curr_file),
+                    Monitor.files_executability_changes(prev_file, curr_file),
+                    Monitor.files_shebang_changes(prev_file, curr_file)
 
           if(!changes.join.empty? || (!brief_mode && !line_changes.empty?))
             report[param][vers]['changed'] << \
@@ -184,119 +185,5 @@ class Gem::Comparator
         true
       end
 
-
-      ##
-      # Return how many lines differ between +prev_file+
-      # and +curr_file+ in format +ADDED/-DELETED
-
-      def lines_changed(prev_file, curr_file)
-        line = compact_files_diff(prev_file, curr_file)
-        return '' if line.empty?
-        "#{Rainbow(line.count('+')).green}/#{Rainbow(line.count('-')).red}"
-      end
-
-      ##
-      # Return changes between files:
-      # + for line added
-      # - for line deleted
-
-      def compact_files_diff(prev_file, curr_file)
-        changes = ''
-        Diffy::Diff.new(
-          prev_file, curr_file, :source => 'files', :context => 0
-        ).each do |line|
-          case line
-          when /^\+/ then changes << Rainbow('+').green
-          when /^-/ then changes << Rainbow('-').red
-          end
-        end
-        changes
-      end
-
-      ##
-      # Find and return permission changes between files
-
-      def permission_changed(prev_file, curr_file)
-        prev_permissions = DirUtils.file_permissions(prev_file)
-        curr_permissions = DirUtils.file_permissions(curr_file)
-
-        if prev_permissions != curr_permissions
-          "  (!) New permissions: " +
-          "#{prev_permissions} -> #{curr_permissions}"
-        else
-          ''
-        end
-      end
-
-      def file_permissions(file)
-        file_permissions = DirUtils.file_permissions(file)
-
-        if file_permissions != '100644'
-          unless (DirUtils.gem_bin_file?(file) && file_permissions == '100755')
-            "  (!) Unexpected permissions: #{file_permissions}"
-          end
-        else
-          ''
-        end
-      end
-
-      ##
-      # Find if the file is now/or was executable
-
-      def executables_changed(prev_file, curr_file)
-        prev_executable = File.stat(prev_file).executable?
-        curr_executable = File.stat(curr_file).executable?
-
-        if !prev_executable && curr_executable
-          "  (!) File is now executable!"
-        elsif prev_executable && !curr_executable
-          "  (!) File is no longer executable!"
-        else
-          ''
-        end
-      end
-
-      def file_executable(file)
-        file_executable = File.stat(file).executable?
-
-        if file_executable && !DirUtils.gem_bin_file?(file)
-          "  (!) File is executable"
-        elsif !file_executable && DirUtils.gem_bin_file?(file)
-          "  (!) File is not executable"
-        else
-          ''
-        end
-      end
-
-      ##
-      # Find if the shabang of the file has been changed
-
-      def shebangs_changed(prev_file, curr_file)
-        return '' if DirUtils.files_same_first_line?(prev_file, curr_file)
-
-        prev_has_shebang = DirUtils.file_has_shebang? prev_file
-        curr_has_shebang = DirUtils.file_has_shebang? curr_file
-
-        if prev_has_shebang && !curr_has_shebang
-            "  (!) Shebang probably lost: #{DirUtils.file_first_line(prev_file)}"
-        elsif !prev_has_shebang && curr_has_shebang
-            "  (!) Shebang probably added: #{DirUtils.file_first_line(curr_file)}"
-        elsif prev_has_shebang && curr_has_shebang
-            "  (!) Shebang probably changed: " +
-            "#{first_lines[prev_file]} -> #{DirUtils.file_first_line(curr_file)}"
-        else
-            ''
-        end
-     end
-
-     def file_shebang(file)
-       file_has_shebang = DirUtils.file_has_shebang? file
-
-       if file_has_shebang
-         " (!) Shebang found: #{DirUtils.file_first_line(file)}"
-       else
-         ''
-       end
-     end
   end
 end
