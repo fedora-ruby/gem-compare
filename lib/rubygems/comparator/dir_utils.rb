@@ -6,8 +6,7 @@ module DirUtils
   attr_accessor :files_first_line
 
   def self.file_first_line(file)
-    @files_first_line[file] ||=
-      File.open(file){ |f| f.readline }.gsub(/(.*)\n/, '\1')
+    File.open(file){ |f| f.readline }.gsub(/(.*)\n/, '\1')
   rescue
   end
 
@@ -24,7 +23,7 @@ module DirUtils
   end
 
   def self.gem_bin_file?(file)
-    file =~ /\Abin\/.*/
+    file =~ /(\A|.*\/)bin\/.*/
   end
 
   ##

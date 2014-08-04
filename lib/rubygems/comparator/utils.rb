@@ -1,4 +1,6 @@
 require 'rainbow'
+require 'rubygems'
+require 'rubygems/user_interaction'
 
 class Gem::Comparator
   module Utils
