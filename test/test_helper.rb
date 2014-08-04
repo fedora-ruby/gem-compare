@@ -1,7 +1,5 @@
 require 'rubygems/test_case'
 require 'rubygems/comparator'
-#require 'rubygems/comparator/dir_utils'
-#require 'rubygems/comparator/monitor'
 
 class TestGemComparator < Gem::TestCase
   def setup
