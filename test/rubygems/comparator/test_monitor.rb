@@ -1,15 +1,6 @@
-require 'rubygems/test_case'
-require 'rubygems/comparator/monitor'
+require 'test_helper'
 
-class TestMonitor < Gem::TestCase
-  def setup
-    super
-    gemfiles_path = File.expand_path('../../gemfiles', File.dirname(__FILE__))
-    @v001 = File.join(gemfiles_path, 'lorem-0.0.1')
-    @v002 = File.join(gemfiles_path, 'lorem-0.0.2')
-    @v003 = File.join(gemfiles_path, 'lorem-0.0.3')
-    @v004 = File.join(gemfiles_path, 'lorem-0.0.4')
-  end
+class TestMonitor < TestGemModule
 
   def test_lines_changed
     file1 = File.join(@v001, 'lib/lorem.rb')

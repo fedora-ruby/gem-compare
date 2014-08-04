@@ -1,5 +1,7 @@
 require 'rubygems/test_case'
 require 'rubygems/comparator'
+#require 'rubygems/comparator/dir_utils'
+#require 'rubygems/comparator/monitor'
 
 class TestGemComparator < Gem::TestCase
   def setup
@@ -16,5 +18,16 @@ class TestGemComparator < Gem::TestCase
     end
 
     @report = @comparator.report
+  end
+end
+
+class TestGemModule < Gem::TestCase
+  def setup
+    super
+    gemfiles_path = File.expand_path('gemfiles', File.dirname(__FILE__))
+    @v001 = File.join(gemfiles_path, 'lorem-0.0.1')
+    @v002 = File.join(gemfiles_path, 'lorem-0.0.2')
+    @v003 = File.join(gemfiles_path, 'lorem-0.0.3')
+    @v004 = File.join(gemfiles_path, 'lorem-0.0.4')
   end
 end

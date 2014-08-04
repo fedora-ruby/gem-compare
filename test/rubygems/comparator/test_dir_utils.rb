@@ -1,15 +1,6 @@
-require 'rubygems/test_case'
-require 'rubygems/comparator/dir_utils'
+require 'test_helper'
 
-class TestDirUtils < Gem::TestCase
-  def setup
-    super
-    gemfiles_path = File.expand_path('../../gemfiles', File.dirname(__FILE__))
-    @v001 = File.join(gemfiles_path, 'lorem-0.0.1')
-    @v002 = File.join(gemfiles_path, 'lorem-0.0.2')
-    @v003 = File.join(gemfiles_path, 'lorem-0.0.3')
-    @v004 = File.join(gemfiles_path, 'lorem-0.0.4')
-  end
+class TestDirUtils < TestGemModule
 
   def test_file_first_line
     file1 = File.join(@v001, 'lib/lorem.rb')
