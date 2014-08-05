@@ -61,7 +61,7 @@ class Gem::Comparator
             deleted, dirs_added = dir_changed(previous, current)
           end
           # Add information about permissions, shebangs etc.
-          added = check_added_files(param, vers, index, added, report, options[:brief])
+          report = check_added_files(param, vers, index, added, report, options[:brief])
 
           report[param].set_header "#{different} #{param}:"
 
@@ -144,6 +144,7 @@ class Gem::Comparator
             report[param][vers]['added'] << change unless change.empty?
           end
         end
+        report
       end
 
       def check_same_files(param, vers, index, files, report, brief_mode)
