@@ -51,6 +51,21 @@ class Gem::Comparator
                             rubygems_version
                             version ]
 
+    # Not present in marshal file containing the specs
+    NOT_IN_MARSHAL = %w[ cert_chain
+                         executables
+                         extensions
+                         extra_rdoc_files
+                         files
+                         license
+                         licenses
+                         metadata
+                         post_install_message
+                         rdoc_options
+                         requirements
+                         signing_key
+                         test_files ]
+
     private
 
       def param_exists?(param)
@@ -58,6 +73,10 @@ class Gem::Comparator
         (SPEC_FILES_PARAMS.include? param) ||
         (DEPENDENCY_PARAMS.include? param) ||
         (GEMFILE_PARAMS.include? param)
+      end
+
+      def param_available_in_marshal?(param)
+        param_exists?(param) && !NOT_IN_MARSHAL.include?(param)
       end
 
       def filter_params(params, param, brief_mode = false)
