@@ -43,11 +43,10 @@ class Gem::Comparator
 
       if file_permissions != '100644'
         unless (DirUtils.gem_bin_file?(file) && file_permissions == '100755')
-          "  (!) Unexpected permissions: #{file_permissions}"
+          return "  (!) Unexpected permissions: #{file_permissions}"
         end
-      else
-        ''
       end
+      ''
     end
 
     def self.files_executability_changes(prev_file, curr_file)
