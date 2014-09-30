@@ -1,10 +1,11 @@
 require 'rubygems/package_task'
 require 'rake/testtask'
 require 'rdoc/task'
+require_relative 'lib/rubygems/comparator'
 
 gemspec = Gem::Specification.new do |s|
   s.name     = 'gem-compare'
-  s.version  = '0.0.3'
+  s.version  = Gem::Comparator::VERSION
   s.platform = Gem::Platform::RUBY
   s.summary     = 'RubyGems plugin for comparing gem versions'
   s.description = <<-EOF

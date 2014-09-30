@@ -22,7 +22,7 @@ class Gem::Comparator
   include Gem::Comparator::Utils
   attr_accessor :options, :report
 
-  VERSION = '0.0.2'
+  VERSION = '0.0.4'
 
   ##
   # Set the working dir and process options
