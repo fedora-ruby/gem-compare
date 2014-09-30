@@ -64,8 +64,8 @@ class Gem::Comparator
           report[param].set_header "#{different} #{param}:"
 
           report[param][vers].section do
-            set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
-                       "#{Rainbow(packages[index].spec.version).blue}:"
+            set_header "#{Rainbow(packages[index-1].spec.version).cyan}->" +
+                       "#{Rainbow(packages[index].spec.version).cyan}:"
             nest('deleted').section do
               set_header '* Deleted:'
               puts deleted unless deleted.empty?
@@ -85,8 +85,8 @@ class Gem::Comparator
           all_same = false unless same_files
 
           if previous == current && same_files && !all_same
-            report[param][vers] << "#{Rainbow(packages[index-1].spec.version).blue}->" + \
-                                   "#{Rainbow(packages[index].spec.version).blue}: No change"
+            report[param][vers] << "#{Rainbow(packages[index-1].spec.version).cyan}->" + \
+                                   "#{Rainbow(packages[index].spec.version).cyan}: No change"
           end
 
         end

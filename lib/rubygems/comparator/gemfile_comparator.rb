@@ -37,8 +37,8 @@ class Gem::Comparator
         curr_gemfile = File.join(unpacked_gem_dirs[@packages[index].spec.version], 'Gemfile')
 
         vers = "#{@packages[index-1].spec.version}->#{@packages[index].spec.version}"
-        report['gemfiles'][vers].set_header "#{Rainbow(packages[index-1].spec.version).blue}->" +
-                                            "#{Rainbow(packages[index].spec.version).blue}:"
+        report['gemfiles'][vers].set_header "#{Rainbow(packages[index-1].spec.version).cyan}->" +
+                                            "#{Rainbow(packages[index].spec.version).cyan}:"
 
         added, deleted, updated = compare_gemfiles(prev_gemfile, curr_gemfile)
 

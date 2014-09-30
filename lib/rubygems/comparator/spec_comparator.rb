@@ -29,7 +29,7 @@ class Gem::Comparator
           report[param].set_header "#{different} #{param}:"
           values.each_with_index do |value, index|
             report[param] << \
-              "#{Rainbow(specs[index].version).blue}: #{value}"
+              "#{Rainbow(specs[index].version).cyan}: #{value}"
           end
         end
       end
