@@ -9,7 +9,7 @@ class Gem::Comparator
     SPACE = ' '
     DEFAULT_INDENT = SPACE*7
     OPERATORS = ['=', '!=', '>', '<', '>=', '<=', '~>']
-    VERSION_REGEX = /\A(\d+\.){0,}\d+(\.[a-zA-Z]+\d{0,1}){0,1}\z/
+    VERSION_REGEX = /\A(\d+\.){0,}\d+(\.[a-zA-Z]+\.{0,1}\d{0,1}){0,1}\z/
     SPEC_PARAMS = %w[ author
                       authors
                       bindir
