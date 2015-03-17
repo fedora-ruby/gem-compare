@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = 'gem-compare'
-  s.version  = '0.0.4'
+  s.version  = '0.0.5'
   s.platform = Gem::Platform::RUBY
   s.summary     = 'RubyGems plugin for comparing gem versions'
   s.description = <<-EOF

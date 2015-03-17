@@ -65,15 +65,20 @@ class Gem::Comparator
 
   def compare_versions(gem_name, versions)
     # Expand versions (<=, >=, ~>) and sort them
-    versions = expand_versions(gem_name, versions)
+    compared_versions = expand_versions(gem_name, versions)
 
-    error 'Only one version specified. Specify at lease two versions.' \
-      if versions.size == 1
+    if versions.include?('_') && compared_versions.size == 1
+      error 'Latest upstream version matches the version given. Nothing to compare.'
+    elsif versions.include?('_') && (compared_versions.size == (versions.size - 1))
+      warn 'Latest upstream version matches one of the versions given.'
+    else compared_versions.size == 1
+      error 'Only one version specified. Specify at lease two versions.'
+    end
 
     # This should match the final versions that has been compared
-    @compared_versions = versions
+    @compared_versions = compared_versions
 
-    versions.each do |version|
+    compared_versions.each do |version|
       download_gems? ?
         get_package(gem_name, version) :
         get_specification(gem_name, version)
