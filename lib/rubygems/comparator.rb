@@ -67,11 +67,11 @@ class Gem::Comparator
     # Expand versions (<=, >=, ~>) and sort them
     compared_versions = expand_versions(gem_name, versions)
 
-    if versions.include?('_') && compared_versions.size == 1
+    if versions.include?('_') && (compared_versions.size == 1)
       error 'Latest upstream version matches the version given. Nothing to compare.'
     elsif versions.include?('_') && (compared_versions.size == (versions.size - 1))
       warn 'Latest upstream version matches one of the versions given.'
-    else compared_versions.size == 1
+    elsif compared_versions.size == 1
       error 'Only one version specified. Specify at lease two versions.'
     end
 
