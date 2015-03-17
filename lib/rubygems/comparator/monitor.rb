@@ -96,7 +96,7 @@ class Gem::Comparator
       file_has_shebang = DirUtils.file_has_shebang? file
 
       if file_has_shebang
-        " (!) Shebang found: #{DirUtils.file_first_line(file)}"
+        "  (!) Shebang found: #{DirUtils.file_first_line(file)}"
       else
         ''
       end
