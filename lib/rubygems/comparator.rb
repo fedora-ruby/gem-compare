@@ -156,6 +156,10 @@ class Gem::Comparator
       gems = json.collect { |version| version['number'] }
       info "Upstream versions: #{gems}"
       gems
+    # "This rubygem could not be found."
+    rescue JSON::ParserError
+      error "Gem #{gem_name} does not exist."
+      exit 1
     end
 
     def latest_gem_version(gem_name)

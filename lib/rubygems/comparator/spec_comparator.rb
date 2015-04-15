@@ -23,7 +23,7 @@ class Gem::Comparator
           v = value(values[0])
           report[param].section do
             set_header "#{self.same} #{param}:"
-	    puts v
+            puts v
           end
         elsif !same_values?(values)
           report[param].set_header "#{different} #{param}:"
