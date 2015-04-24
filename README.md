@@ -103,7 +103,7 @@ Compared versions: ["2.0.1", "3.0.0"]
               (!) Shebang probably added: #!/usr/bin/env ruby
 ```
 
-If you would like to see all development dependencies for `prawn` since `0.1` version, let *gem-compare* expand the versions for you:
+If you would like to see all development dependencies for `prawn` since `0.1` version, let *gem-compare* expand the versions for you (`>=0.0` won't work as RubyGems asks for the latest spec only):
 
 ```
 $ gem compare prawn '>=0.1' -k -a --development
