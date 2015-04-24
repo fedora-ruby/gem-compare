@@ -29,9 +29,9 @@ Compared versions: ["3.0.0", "4.0.0"]
     4.0.0: []
   DIFFERENT has_rdoc:
     3.0.0: true
-    4.0.0: 
+    4.0.0:
   DIFFERENT license:
-    3.0.0: 
+    3.0.0:
     4.0.0: MIT
   DIFFERENT licenses:
     3.0.0: []
@@ -106,7 +106,7 @@ Compared versions: ["2.0.1", "3.0.0"]
 If you would like to see all development dependencies for `prawn` since `0.1` version, let *gem-compare* expand the versions for you:
 
 ```
-$ gem compare prawn '>=0.1' -k -a -p --development
+$ gem compare prawn '>=0.1' -k -a --development
 Compared versions: ["0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2", "0.2.3", "0.3.0", "0.4.0", "0.4.1", "0.5.0.1", "0.5.1", "0.6.1", "0.6.2", "0.6.3", "0.7.1", "0.7.2", "0.8.4", "0.11.1", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.14.0", "0.15.0", "1.0.0", "1.1.0"]
   DIFFERENT development dependencies:
     0.12.0->0.13.0:
