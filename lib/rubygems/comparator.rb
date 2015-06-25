@@ -6,6 +6,7 @@ require 'json'
 require 'rubygems/package'
 require 'rubygems/dependency'
 require 'rubygems/spec_fetcher'
+require 'rubygems/comparator/version'
 require 'rubygems/comparator/utils'
 require 'rubygems/comparator/report'
 require 'rubygems/comparator/spec_comparator'
@@ -21,8 +22,6 @@ require 'rubygems/comparator/gemfile_comparator'
 class Gem::Comparator
   include Gem::Comparator::Utils
   attr_accessor :options, :report
-
-  VERSION = '0.0.4'
 
   ##
   # Set the working dir and process options

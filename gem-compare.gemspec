@@ -1,6 +1,9 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+require 'rubygems/comparator/version'
+
 Gem::Specification.new do |s|
   s.name     = 'gem-compare'
-  s.version  = '0.0.6'
+  s.version  = Gem::Comparator::VERSION
   s.platform = Gem::Platform::RUBY
   s.summary     = 'RubyGems plugin for comparing gem versions'
   s.description = <<-EOF
