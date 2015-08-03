@@ -6,6 +6,7 @@ require 'json'
 require 'rubygems/package'
 require 'rubygems/dependency'
 require 'rubygems/spec_fetcher'
+require 'rubygems/remote_fetcher'
 require 'rubygems/comparator/version'
 require 'rubygems/comparator/utils'
 require 'rubygems/comparator/report'
@@ -90,10 +91,13 @@ class Gem::Comparator
                    DependencyComparator,
                    GemfileComparator]
 
-    comparators.each do |c|
-      comparator = c.new
-      cmp = (comparator.compares == :packages) ? gem_packages.values : gem_specs.values
-      @report = comparator.compare(cmp, @report, @options)
+    # Use different gem sources if specified
+    with_sources @options[:sources] do
+      comparators.each do |c|
+        comparator = c.new
+        cmp = (comparator.compares == :packages) ? gem_packages.values : gem_specs.values
+        @report = comparator.compare(cmp, @report, @options)
+      end
     end
 
     # Clean up
@@ -106,6 +110,40 @@ class Gem::Comparator
   end
 
   private
+
+    def with_sources(sources, &block)
+      override_sources sources do
+        error 'Source URIs needs to be separated by comma.' unless @options[:sources].kind_of?(Array)
+        yield
+      end unless sources.nil?
+    end
+
+    def override_sources(new_sources, &block)
+      original_sources = Gem.sources.clone
+      old_sources = Gem.sources.to_a
+      old_sources.each do |source_uri|
+        Gem.sources.delete source_uri
+      end
+      new_sources.each do |source_uri|
+        source = Gem::Source.new source_uri
+        source.load_specs :released
+        Gem.sources << source
+      end
+      Gem.configuration.write
+      yield
+    rescue URI::Error, ArgumentError
+      error 'Given URI is not valid.'
+    rescue Gem::RemoteFetcher::FetchError => e
+      error "Fetching the gem from the given URI failed with the " +
+            "following error:\n       #{e.message}"
+    ensure
+      original_sources.each do |source_uri|
+        source = Gem::Source.new source_uri
+        source.load_specs :released
+        Gem.sources << source
+      end
+      Gem.configuration.write
+    end
 
     ##
     # If there is an unexpanded version in +versions+ such

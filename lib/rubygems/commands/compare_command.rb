@@ -49,6 +49,10 @@ class Gem::Commands::CompareCommand < Gem::Command
       options[:brief] = true
     end
 
+    add_option('-sSOURCES', '--sources SOURCES', 'Use different source URIs for gems (separated by comma)') do |sources, options|
+      options[:sources] = sources.split ','
+    end
+
   end
 
   def arguments # :nodoc:
