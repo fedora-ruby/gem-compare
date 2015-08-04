@@ -143,6 +143,12 @@ $ gem compare nokogiri 1.5.6 1.6.1 -ak --platform java # for JRuby
 $ gem compare nokogiri 1.5.6 1.6.1 -ak --platform x86-mingw32 # on Windows
 ```
 
+#### Gems from different source server
+
+If you run your own gem source server, you can override the RubyGems.org default with
+`--sources SOURCE1,SOURCE2` option.
+
+
 ### Supported options
 
 To see all possible options run:
