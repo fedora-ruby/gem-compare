@@ -112,10 +112,13 @@ class Gem::Comparator
   private
 
     def with_sources(sources, &block)
-      override_sources sources do
-        error 'Source URIs needs to be separated by comma.' unless @options[:sources].kind_of?(Array)
+      if sources
+        override_sources sources do
+          yield
+        end
+      else
         yield
-      end unless sources.nil?
+      end
     end
 
     def override_sources(new_sources, &block)
