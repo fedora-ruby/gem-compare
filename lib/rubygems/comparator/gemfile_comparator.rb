@@ -44,11 +44,11 @@ class Gem::Comparator
 
         report['gemfiles'][vers]['added'].section do
           set_header '* Added:'
-          puts added.map { |x| "#{x.name} #{x.requirements_list}" } unless added.empty?
+          puts added.map { |x| "#{x.name} #{x.requirements_list} (#{x.type})" } unless added.empty?
         end
         report['gemfiles'][vers]['deleted'].section do
           set_header '* Deleted'
-          puts deleted.map { |x| "#{x.name} #{x.requirements_list}" } unless deleted.empty?
+          puts deleted.map { |x| "#{x.name} #{x.requirements_list} (#{x.type})" } unless deleted.empty?
         end
         report['gemfiles'][vers]['updated'].section do
           set_header '* Updated'
