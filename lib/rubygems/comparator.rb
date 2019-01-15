@@ -12,6 +12,7 @@ require 'rubygems/comparator/utils'
 require 'rubygems/comparator/report'
 require 'rubygems/comparator/spec_comparator'
 require 'rubygems/comparator/file_list_comparator'
+require 'rubygems/comparator/file_diff_comparator'
 require 'rubygems/comparator/dependency_comparator'
 require 'rubygems/comparator/gemfile_comparator'
 
@@ -88,6 +89,7 @@ class Gem::Comparator
 
     comparators = [SpecComparator,
                    FileListComparator,
+                   FileDiffComparator,
                    DependencyComparator,
                    GemfileComparator]
 
