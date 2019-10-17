@@ -20,11 +20,70 @@ class TestMonitor < TestGemModule
     assert_equal '(!) New permissions: 100664 -> 100775', Gem::Comparator::Monitor.files_permissions_changes(file1, file2).strip 
   end
 
+  def test_files_permissions_changes_ignores_group_writable_added
+    file1 = Tempfile.new
+    file2 = Tempfile.new
+    begin
+      File.chmod(0644, file1)
+      File.chmod(0664, file2)
+      assert_equal '', Gem::Comparator::Monitor.files_permissions_changes(file1.path, file2.path, true)
+    ensure
+      file1.unlink
+      file2.unlink
+    end
+  end
+
+  def test_files_permissions_changes_ignores_group_writable_other_changes
+    file1 = Tempfile.new
+    file2 = Tempfile.new
+    begin
+      File.chmod(0644, file1)
+      File.chmod(0660, file2)
+      assert_equal '  (!) New permissions: 100644 -> 100660', Gem::Comparator::Monitor.files_permissions_changes(file1.path, file2.path, true)
+    ensure
+      file1.unlink
+      file2.unlink
+    end
+  end
+
+  def test_files_permissions_changes_ignores_group_writable_removed
+    file1 = Tempfile.new
+    file2 = Tempfile.new
+    begin
+      File.chmod(0664, file1)
+      File.chmod(0644, file2)
+      assert_equal '', Gem::Comparator::Monitor.files_permissions_changes(file1.path, file2.path, true)
+    ensure
+      file1.unlink
+      file2.unlink
+    end
+  end
+
   def test_new_file_permissions
     file1 = File.join(@v004, 'bin/lorem')
     file2 = File.join(@v004, 'lib/lorem.rb')
     assert_equal '(!) Unexpected permissions: 100775', Gem::Comparator::Monitor.new_file_permissions(file1).strip 
     assert_equal '(!) Unexpected permissions: 100664', Gem::Comparator::Monitor.new_file_permissions(file2).strip 
+  end
+
+  def test_new_file_permissions_ignore_group_writable
+    file = Tempfile.new
+    begin
+      File.chmod(0664, file)
+      assert_equal '', Gem::Comparator::Monitor.new_file_permissions(file, true)
+    ensure
+      file.unlink
+    end
+  end
+
+  def test_new_file_permissions_ignore_group_writable_unreadable
+    file = Tempfile.new
+    begin
+      File.chmod(0660, file)
+      assert_equal '  (!) Unexpected permissions: 100660', Gem::Comparator::Monitor.new_file_permissions(file, true)
+    ensure
+      file.unlink
+    end
   end
 
   def test_files_executability_changes

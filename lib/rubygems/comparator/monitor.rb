@@ -26,25 +26,30 @@ class Gem::Comparator
       changes
     end
 
-    def self.files_permissions_changes(prev_file, curr_file)
-      prev_permissions = DirUtils.file_permissions(prev_file)
-      curr_permissions = DirUtils.file_permissions(curr_file)
+    def self.files_permissions_changes(prev_file, curr_file, ignore_group_writable=false)
+      prev_permissions = File.stat(prev_file).mode
+      curr_permissions = File.stat(curr_file).mode
 
-      if prev_permissions != curr_permissions
+      diff = prev_permissions ^ curr_permissions
+      diff ^= 020 if ignore_group_writable
+
+      if diff != 0
         "  (!) New permissions: " +
-        "#{prev_permissions} -> #{curr_permissions}"
+        "#{format_permissions(prev_permissions)} -> #{format_permissions(curr_permissions)}"
       else
         ''
       end
     end
 
-    def self.new_file_permissions(file)
-      file_permissions = DirUtils.file_permissions(file)
+    def self.new_file_permissions(file, ignore_group_writable=false)
+      file_permissions = File.stat(file).mode
+      formatted_file_permissions = format_permissions(file_permissions)
 
-      if file_permissions != '100644'
-        unless (DirUtils.gem_bin_file?(file) && file_permissions == '100755')
-          return "  (!) Unexpected permissions: #{file_permissions}"
-        end
+      file_permissions ^= 020 if ignore_group_writable
+
+      unless file_permissions == 0100644 || \
+          (DirUtils.gem_bin_file?(file) && file_permissions == 0100755)
+        return "  (!) Unexpected permissions: #{formatted_file_permissions}"
       end
       ''
     end
@@ -100,6 +105,10 @@ class Gem::Comparator
       else
         ''
       end
+    end
+
+    def self.format_permissions(permissions)
+      sprintf("%o", permissions)
     end
   end
 end
