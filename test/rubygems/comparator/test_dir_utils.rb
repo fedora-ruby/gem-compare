@@ -29,7 +29,7 @@ class TestDirUtils < TestGemModule
   def test_file_permissions
     file1 = File.join(@v001, 'lib/lorem.rb')
     file2 = File.join(@v004, 'bin/lorem')
-    assert_equal '100664', Gem::Comparator::DirUtils.file_permissions(file1)
+    assert_equal '100644', Gem::Comparator::DirUtils.file_permissions(file1)
     assert_equal '100775', Gem::Comparator::DirUtils.file_permissions(file2)
   end
 
@@ -47,6 +47,6 @@ class TestDirUtils < TestGemModule
 
   def test_remove_subdirs
     dirs = ['/dir1/dir2/dir3', '/dir1/dir2', '/dir', 'Gemfile']
-    assert_equal ["/dir1/dir2", "/dir", "Gemfile"], Gem::Comparator::DirUtils.remove_subdirs(dirs) 
+    assert_equal ["/dir1/dir2", "/dir", "Gemfile"], Gem::Comparator::DirUtils.remove_subdirs(dirs)
   end
 end

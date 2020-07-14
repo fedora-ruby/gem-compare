@@ -17,14 +17,13 @@ class TestMonitor < TestGemModule
   def test_files_permissions_changes
     file1 = File.join(@v003, 'bin/lorem')
     file2 = File.join(@v004, 'bin/lorem')
-    assert_equal '(!) New permissions: 100664 -> 100775', Gem::Comparator::Monitor.files_permissions_changes(file1, file2).strip 
+    assert_equal '(!) New permissions: 100644 -> 100775', Gem::Comparator::Monitor.files_permissions_changes(file1, file2).strip
   end
 
   def test_new_file_permissions
     file1 = File.join(@v004, 'bin/lorem')
     file2 = File.join(@v004, 'lib/lorem.rb')
-    assert_equal '(!) Unexpected permissions: 100775', Gem::Comparator::Monitor.new_file_permissions(file1).strip 
-    assert_equal '(!) Unexpected permissions: 100664', Gem::Comparator::Monitor.new_file_permissions(file2).strip 
+    assert_equal '(!) Unexpected permissions: 100664', Gem::Comparator::Monitor.new_file_permissions(file2).strip
   end
 
   def test_files_executability_changes
