@@ -40,6 +40,10 @@ class Gem::Commands::CompareCommand < Gem::Command
       options[:param] = 'files'
     end
 
+    add_option('-F', '--diff', 'Diff file contents') do
+      options[:param] = 'diff'
+    end
+
     add_option('-g', '--gemfiles', 'Compare only Gemfiles') do
       options[:param] = 'gemfiles'
     end

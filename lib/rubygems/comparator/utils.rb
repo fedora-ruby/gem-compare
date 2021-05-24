@@ -39,6 +39,7 @@ class Gem::Comparator
     SPEC_FILES_PARAMS = %w[ files
                             test_files
                             extra_rdoc_files ]
+    DIFF_PARAMS = %w[ diff ]
     DEPENDENCY_PARAMS = %w[ runtime_dependency
                             development_dependency ]
     GEMFILE_PARAMS = %w[ gemfiles ]
@@ -57,6 +58,7 @@ class Gem::Comparator
                          extensions
                          extra_rdoc_files
                          files
+                         diff
                          license
                          licenses
                          metadata
@@ -71,6 +73,7 @@ class Gem::Comparator
       def param_exists?(param)
         (SPEC_PARAMS.include? param) ||
         (SPEC_FILES_PARAMS.include? param) ||
+        (DIFF_PARAMS.include? param) ||
         (DEPENDENCY_PARAMS.include? param) ||
         (GEMFILE_PARAMS.include? param)
       end
