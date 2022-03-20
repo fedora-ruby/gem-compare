@@ -166,7 +166,7 @@ $ gem compare --help
 
 ## Requirements
 
-Currently tested against RubyGems 3.x. Use the `0.7.0` release for RubyGems 2.x.
+Currently tested against RubyGems 3.x. Use the `0.0.7` release for RubyGems 2.x.
 
 
 ## Copyright
