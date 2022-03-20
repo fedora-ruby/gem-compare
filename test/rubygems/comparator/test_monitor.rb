@@ -14,6 +14,20 @@ class TestMonitor < TestGemModule
     assert_equal '++++', Gem::Comparator::Monitor.compact_files_diff(file1, file2)
   end
 
+  def test_files_diff
+    Rainbow.enabled = false
+    file1 = File.join(@v001, 'lib/lorem.rb')
+    file2 = File.join(@v002, 'lib/lorem.rb')
+    diff = Gem::Comparator::Monitor.files_diff(file1, file2)
+    assert_equal diff.split(/\n/, 3)[2], <<~EOF
+      @@ -6,0 +7,4 @@
+      +
+      +  def new_method
+      +    raise 'needs to be implemented'
+      +  end
+    EOF
+  end
+
   def test_files_permissions_changes
     file1 = File.join(@v003, 'bin/lorem')
     file2 = File.join(@v004, 'bin/lorem')
