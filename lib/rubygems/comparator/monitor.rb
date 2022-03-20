@@ -26,6 +26,20 @@ class Gem::Comparator
       changes
     end
 
+    def self.files_diff(prev_file, curr_file)
+      changes = ''
+      Diffy::Diff.new(
+        prev_file, curr_file, :source => 'files', :context => 0, :include_diff_info => true
+      ).each do |line|
+        case line
+        when /^\+/ then changes << Rainbow(line).green
+        when /^-/ then changes << Rainbow(line).red
+        else changes << line
+        end
+      end
+      changes
+    end
+
     def self.files_permissions_changes(prev_file, curr_file)
       prev_permissions = DirUtils.file_permissions(prev_file)
       curr_permissions = DirUtils.file_permissions(curr_file)

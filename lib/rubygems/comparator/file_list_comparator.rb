@@ -80,7 +80,7 @@ class Gem::Comparator
           report = check_added_files(param, vers, index, added, report, options[:brief])
 
           report[param][vers]['changed'].set_header '* Changed:'
-          report = check_same_files(param, vers, index, same, report, options[:brief])
+          report = check_same_files(param, vers, index, same, report, options[:brief], options[:diff])
           same_files = report[param][vers]['changed'].messages.empty?
           all_same = false unless same_files
 
@@ -148,22 +148,30 @@ class Gem::Comparator
         report
       end
 
-      def check_same_files(param, vers, index, files, report, brief_mode)
+      def check_same_files(param, vers, index, files, report, brief_mode, diff_mode)
         files.each do |file|
           prev_file = File.join(unpacked_gem_dirs[@packages[index-1].spec.version], file)
           curr_file = File.join(unpacked_gem_dirs[@packages[index].spec.version], file)
 
           next unless check_files([prev_file, curr_file])
 
-          line_changes = Monitor.lines_changed(prev_file, curr_file)
+          line_changes = if diff_mode
+            Monitor.files_diff(prev_file, curr_file)
+          else
+            Monitor.lines_changed(prev_file, curr_file)
+          end
 
           changes = Monitor.files_permissions_changes(prev_file, curr_file),
                     Monitor.files_executability_changes(prev_file, curr_file),
                     Monitor.files_shebang_changes(prev_file, curr_file)
 
           if(!changes.join.empty? || (!brief_mode && !line_changes.empty?))
-            report[param][vers]['changed'] << \
-              "#{file} #{line_changes}"
+            if diff_mode
+              report[param][vers]['changed'][file].set_header file
+              report[param][vers]['changed'][file] << line_changes.split("\n")
+            else
+              report[param][vers]['changed'] << "#{file} #{line_changes}"
+            end
           end
 
           changes.each do |change|
