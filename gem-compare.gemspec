@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.licenses = ['MIT']
   s.author   = 'Josef Stribny'
   s.email    = 'strzibny@strzibny.name'
-  s.files = Dir['README.md', 'LICENSE', 'Rakefile',
+  s.files = Dir['README.md', 'LICENSE', 'Rakefile', 'test/gemfiles/**/*',
                 'lib/**/*.rb', 'lib/**/**/*.rb', 'test/**/test*.rb']
   s.required_ruby_version     = '>= 2.0.0'
   s.required_rubygems_version = '>= 2.0.0'
