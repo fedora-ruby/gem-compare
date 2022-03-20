@@ -56,7 +56,7 @@ class Gem::Comparator
       end
 
       def section(&block)
-        instance_eval &block
+        instance_eval(&block)
       end
 
       def set_header(message)
@@ -122,7 +122,6 @@ class Gem::Comparator
         def set_parent(parent)
           parent.sections << self
           @level = parent.level + 1
-          parent_section = parent
         end
 
     end

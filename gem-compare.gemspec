@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.email    = 'strzibny@strzibny.name'
   s.files = Dir['README.md', 'LICENSE', 'Rakefile', 'test/gemfiles/**/*',
                 'lib/**/*.rb', 'lib/**/**/*.rb', 'test/**/test*.rb']
-  s.required_ruby_version     = '>= 2.0.0'
-  s.required_rubygems_version = '>= 2.0.0'
+  s.required_ruby_version     = '>= 3.0.0'
+  s.required_rubygems_version = '>= 3.0.0'
   s.add_runtime_dependency 'json'
   s.add_runtime_dependency 'curb'
   s.add_runtime_dependency 'diffy'

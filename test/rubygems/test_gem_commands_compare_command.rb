@@ -1,11 +1,16 @@
-require 'rubygems/test_case'
+require_relative '../test_helper'
+require 'rubygems/user_interaction'
+require 'rubygems/mock_gem_ui'
 require 'rubygems/commands/compare_command'
 
-class TestGemCommandsCompareCommand < Gem::TestCase
+class TestGemCommandsCompareCommand < Minitest::Test
+  include Gem::DefaultUserInteraction
+
   def setup
     super
 
     @command = Gem::Commands::CompareCommand.new
+    @ui = Gem::MockGemUi.new
   end
 
   def test_execute_no_gemfile

@@ -1,7 +1,7 @@
-require 'rubygems/test_case'
+require_relative '../../test_helper'
 require 'rubygems/comparator'
 
-class TestGemComparatorReport < Gem::TestCase
+class TestGemComparatorReport < Minitest::Test
   def setup
     super
     @report = Gem::Comparator::Report.new

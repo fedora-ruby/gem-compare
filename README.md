@@ -1,18 +1,26 @@
 # gem-compare
 
-## Description
-
 *gem-compare* is a RubyGems plugin that compares different versions of the specified gem. It can help you to track changes in metadata through the time, see how dependencies were evolving and spot important changes in gem's files such as shebang or permissions modifications.
+
+This is especially handy for:
+
+- checking what goes into to a next gem release
+- tracking dependencies and license changes before upgrades
+- spotting anything suspicious and unusual
 
 ## Installation
 
 You can install `gem-compare` as a gem from RubyGems.org:
 
-```
-gem install gem-compare
+```bash
+$ gem install gem-compare
 ```
 
-Once it's stable I will package it for Fedora.
+You'll also need header files for `curl` to install the `curb` dependency. On Fedora, run:
+
+```bash
+$ sudo dnf install -y libcurl-devel
+```
 
 ## Usage
 
@@ -158,12 +166,11 @@ $ gem compare --help
 
 ## Requirements
 
-Currently tested against RubyGems 2.x.
+Currently tested against RubyGems 3.x. Use the `0.7.0` release for RubyGems 2.x.
 
-## Contributions
-
-Contributions are welcome! Please send a PR and make sure you follow the coding style.
 
 ## Copyright
+
+Made by [Josef Strzibny](https://strzibny.name).
 
 Released under the MIT license. Feel free to contribute!

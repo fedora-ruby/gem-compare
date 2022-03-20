@@ -1,7 +1,7 @@
-require 'rubygems/test_case'
+require 'minitest/autorun'
 require 'rubygems/comparator'
 
-class TestGemComparator < Gem::TestCase
+class TestGemComparator < Minitest::Test
   def setup
     super
 
@@ -19,7 +19,7 @@ class TestGemComparator < Gem::TestCase
   end
 end
 
-class TestGemModule < Gem::TestCase
+class TestGemModule < Minitest::Test
   def setup
     super
     gemfiles_path = File.expand_path('gemfiles', File.dirname(__FILE__))

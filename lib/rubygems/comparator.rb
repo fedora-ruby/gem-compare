@@ -164,11 +164,11 @@ class Gem::Comparator
           expanded << version
           next
         end
-        op, v = (version.scan /(>=|<=|~>|!=|>|<|=)\s*(.*)/).flatten
+        op, v = (version.scan(/(>=|<=|~>|!=|>|<|=)\s*(.*)/)).flatten
         # Supported operator and version?
         if OPERATORS.include?(op) && v =~ VERSION_REGEX
           dep = Gem::Dependency.new gem_name, version
-          specs_and_sources, errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
+          specs_and_sources, _errors = Gem::SpecFetcher.fetcher.spec_for_dependency dep
           specs_and_sources.each do |s|
             expanded << s[0].version
           end
