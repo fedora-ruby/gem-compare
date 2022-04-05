@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    gem-compare (0.0.7)
-      curb
+    gem-compare (1.0.0)
       diffy
       gemnasium-parser
       json
@@ -11,7 +10,6 @@ PATH
 GEM
   remote: https://www.rubygems.org/
   specs:
-    curb (1.0.0)
     diffy (3.4.0)
     gemnasium-parser (0.1.9)
     json (2.6.1)
