@@ -1,7 +1,7 @@
 require 'tmpdir'
 require 'rbconfig'
 require 'rainbow'
-require 'curb'
+require 'uri'
 require 'json'
 require 'rubygems/package'
 require 'rubygems/dependency'
@@ -188,11 +188,8 @@ class Gem::Comparator
     end
 
     def remote_gem_versions(gem_name)
-      client = Curl::Easy.new
-      client.url = "https://rubygems.org/api/v1/versions/#{gem_name}.json"
-      client.follow_location = true
-      client.http_get
-      json = JSON.parse(client.body_str)
+      body_str = URI.open("https://rubygems.org/api/v1/versions/#{gem_name}.json").read
+      json = JSON.parse(body_str)
       gems = json.collect { |version| version['number'] }
       info "Upstream versions: #{gems}"
       gems

@@ -16,12 +16,6 @@ You can install `gem-compare` as a gem from RubyGems.org:
 $ gem install gem-compare
 ```
 
-You'll also need header files for `curl` to install the `curb` dependency. On Fedora, run:
-
-```bash
-$ sudo dnf install -y libcurl-devel
-```
-
 ## Usage
 
 By default, `gem-compare` compares specified versions of the given gem and includes only changes in the final report. If it's supposed to compare file lists or Gemfiles it will need to download the gems, otherwise it just downloads the specs. If you want to keep the downloaded `.gem` files, use `-k` (as 'keep') option. If you want to see the full report use `-a` (as 'all') switch:
