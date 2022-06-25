@@ -10,7 +10,7 @@ PATH
 GEM
   remote: https://www.rubygems.org/
   specs:
-    diffy (3.4.0)
+    diffy (3.4.2)
     gemnasium-parser (0.1.9)
     json (2.6.1)
     minitest (4.7.5)
