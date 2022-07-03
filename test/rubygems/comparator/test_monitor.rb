@@ -111,7 +111,7 @@ class TestMonitor < TestGemModule
     file = Tempfile.new
     begin
       File.chmod(0660, file)
-      assert_equal '  (!) Unexpected permissions: 100660', Gem::Comparator::Monitor.new_file_permissions(file, true)
+      assert_equal '  (!) Unexpected permissions: 100660', Gem::Comparator::Monitor.new_file_permissions(file.path, true)
     ensure
       file.unlink
     end
