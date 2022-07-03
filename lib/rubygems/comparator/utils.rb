@@ -19,7 +19,6 @@ class Gem::Comparator
                       email
                       executables
                       extensions
-                      has_rdoc
                       homepage
                       license
                       licenses
