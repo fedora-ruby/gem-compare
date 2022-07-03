@@ -3,6 +3,10 @@ name: CI
 on:
   push:
 
+# GitHub Actions notes
+# - outcome in step name so we can see it without having to expand logs
+# - every step must define a `uses` or `run` key
+
 jobs:
   test:
     name: >-
@@ -24,15 +28,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
+      continue-on-error: ${{ matrix.allow-failure || false }}
+      id: bundle
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: "setup-ruby and bundle install outcome: ${{ steps.bundle.outcome }}"
+      run: echo ""
     - run: bundle exec rake
-      id: test
       continue-on-error: ${{ matrix.allow-failure || false }}
-    # set outcome in step name so we can see it without having to expand logs
-    - name: >-
-        Test outcome: ${{ steps.test.outcome }}
-      # every step must define a `uses` or `run` key
-      run: |
-        echo "Test outcome: ${{ steps.test.outcome }}"
+      id: test
+    - name: "bundle exec rake outcome: ${{ steps.test.outcome }}"
+      run: echo ""
