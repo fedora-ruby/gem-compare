@@ -7,14 +7,14 @@ class TestDirUtils < TestGemModule
     file2 = File.join(@v002, 'bin/lorem')
     file3 = File.join(@v003, 'bin/lorem')
     assert_equal 'require "lorem/version"', Gem::Comparator::DirUtils.file_first_line(file1)
-    assert_equal nil, Gem::Comparator::DirUtils.file_first_line(file2)
+    assert_nil Gem::Comparator::DirUtils.file_first_line(file2)
     assert_equal '#!/usr/bin/ruby', Gem::Comparator::DirUtils.file_first_line(file3)
   end
 
   def test_file_has_shebang?
     file1 = File.join(@v003, 'lib/lorem.rb')
     file2 = File.join(@v004, 'bin/lorem')
-    assert_equal nil, Gem::Comparator::DirUtils.file_has_shebang?(file1)
+    assert_nil Gem::Comparator::DirUtils.file_has_shebang?(file1)
     assert_equal 0, Gem::Comparator::DirUtils.file_has_shebang?(file2)
   end
 
@@ -36,7 +36,7 @@ class TestDirUtils < TestGemModule
   def test_gem_bin_file
     file1 = File.join(@v001, 'lib/lorem.rb')
     file2 = File.join(@v004, 'bin/lorem')
-    assert_equal nil, Gem::Comparator::DirUtils.gem_bin_file?(file1)
+    assert_nil Gem::Comparator::DirUtils.gem_bin_file?(file1)
     assert_equal 0, Gem::Comparator::DirUtils.gem_bin_file?(file2)
   end
 

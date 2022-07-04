@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+
+# GitHub Actions notes
+# - outcome in step name so we can see it without having to expand logs
+# - every step must define a `uses` or `run` key
+
+jobs:
+  test:
+    name: >-
+      ${{ matrix.os }} ${{ matrix.ruby }}
+    env:
+      TESTOPTS: -v
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04]
+        ruby: ['3.0', '3.1']
+        include:
+          - { os: ubuntu-20.04 , ruby: ruby-head }
+          - { os: ubuntu-20.04 , ruby: jruby, allow-failure: true }
+          - { os: ubuntu-20.04 , ruby: jruby-head }
+          - { os: ubuntu-20.04 , ruby: truffleruby }
+          - { os: ubuntu-20.04 , ruby: truffleruby-head }
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ruby/setup-ruby@v1
+      continue-on-error: ${{ matrix.allow-failure || false }}
+      id: bundle
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - name: "setup-ruby and bundle install outcome: ${{ steps.bundle.outcome }}"
+      run: echo ""
+    - run: bundle exec rake
+      continue-on-error: ${{ matrix.allow-failure || false }}
+      id: test
+    - name: "bundle exec rake outcome: ${{ steps.test.outcome }}"
+      run: echo ""

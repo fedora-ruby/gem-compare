@@ -140,11 +140,6 @@ class TestSpecComparator < TestGemComparator
     assert_equal 'SAME signing_key:', @report['signing_key'].lines(0)
   end
   
-  def test_has_rdoc_comparison
-    assert_equal 'SAME has_rdoc:', @report['has_rdoc'].header.data
-    assert_equal 'SAME has_rdoc:', @report['has_rdoc'].lines(0)
-  end
-  
   def test_date_comparison
     assert_equal 'SAME date:', @report['date'].header.data
     assert_equal 'SAME date:', @report['date'].lines(0)
