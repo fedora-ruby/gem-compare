@@ -34,6 +34,7 @@ end
 class TestGemModule < Minitest::Test
   def setup
     super
+    Rainbow.enabled = false
     setup_file_permissions
     gemfiles_path = File.expand_path('gemfiles', File.dirname(__FILE__))
     @v001 = File.join(gemfiles_path, 'lorem-0.0.1')

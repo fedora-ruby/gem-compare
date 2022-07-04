@@ -15,7 +15,6 @@ class TestMonitor < TestGemModule
   end
 
   def test_files_diff
-    Rainbow.enabled = false
     file1 = File.join(@v001, 'lib/lorem.rb')
     file2 = File.join(@v002, 'lib/lorem.rb')
     diff = Gem::Comparator::Monitor.files_diff(file1, file2)
