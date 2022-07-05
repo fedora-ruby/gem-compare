@@ -14,6 +14,7 @@ class Gem::Comparator
     end
 
     def self.compact_files_diff(prev_file, curr_file)
+      prev_file = prev_file.nil? ? Tempfile.new.path : prev_file
       changes = ''
       Diffy::Diff.new(
         prev_file, curr_file, :source => 'files', :context => 0
@@ -27,6 +28,7 @@ class Gem::Comparator
     end
 
     def self.files_diff(prev_file, curr_file)
+      prev_file = prev_file.nil? ? Tempfile.new.path : prev_file
       changes = ''
       Diffy::Diff.new(
         prev_file, curr_file, :source => 'files', :context => 0, :include_diff_info => true
