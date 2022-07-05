@@ -12,6 +12,7 @@ class TestFileListComparator < TestGemComparator
     assert_equal "(!) File is not executable", @report['files']['0.0.2->0.0.3']['added'].lines(2).strip
     assert_equal "(!) Shebang found: #!/usr/bin/ruby", @report['files']['0.0.2->0.0.3']['added'].lines(3).strip
     assert_equal "lib/lorem/utils.rb +7/-0", @report['files']['0.0.2->0.0.3']['added'].lines(4).strip
+    assert_nil @report['files']['0.0.2->0.0.3']['added'].lines(6)
     assert_equal [], @report['files']['0.0.2->0.0.3']['deleted'].messages
     assert_equal [], @report['files']['0.0.2->0.0.3']['updated'].messages
     assert_equal [], @report['files']['0.0.3->0.0.4']['added'].messages

@@ -104,7 +104,7 @@ class Gem::Comparator
       end
 
       def lines(line_num)
-        all_messages[line_num].data
+        all_messages[line_num]&.data
       end
 
       def nested_messages
