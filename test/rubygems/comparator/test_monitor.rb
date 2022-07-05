@@ -18,13 +18,14 @@ class TestMonitor < TestGemModule
     file1 = File.join(@v001, 'lib/lorem.rb')
     file2 = File.join(@v002, 'lib/lorem.rb')
     diff = Gem::Comparator::Monitor.files_diff(file1, file2)
-    assert_equal diff.split(/\n/, 3)[2], <<~EOF
+    expected_diff = <<~EOF
       @@ -6,0 +7,4 @@
       +
       +  def new_method
       +    raise 'needs to be implemented'
       +  end
     EOF
+    assert_equal expected_diff, diff.split(/\n/, 3)[2]
   end
 
   def test_files_permissions_changes
