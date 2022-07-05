@@ -77,7 +77,7 @@ class Gem::Comparator
             end
           end
           # Add information about permissions, shebangs etc.
-          report = check_added_files(param, vers, index, added, report, options[:brief])
+          report = check_added_files(param, vers, index, added, report, options[:brief], options[:diff])
 
           report[param][vers]['changed'].set_header '* Changed:'
           report = check_same_files(param, vers, index, same, report, options[:brief], options[:diff])
@@ -127,18 +127,27 @@ class Gem::Comparator
         [deleted, added]
       end
 
-      def check_added_files(param, vers, index, files, report, brief_mode)
+      def check_added_files(param, vers, index, files, report, brief_mode, diff_mode)
         files.each do |file|
           added_file = File.join(unpacked_gem_dirs[@packages[index].spec.version], file)
 
-          #line_changes = lines_changed(prev_file, curr_file)
+          line_changes = if diff_mode
+            Monitor.files_diff(nil, added_file)
+          else
+            Monitor.lines_changed(nil, added_file)
+          end
 
           changes = Monitor.new_file_permissions(added_file),
                     Monitor.new_file_executability(added_file),
                     Monitor.new_file_shebang(added_file)
 
-          if(!changes.join.empty? || !brief_mode)
-            report[param][vers]['added'] << "#{file}"
+          if(!changes.join.empty? || (!brief_mode && !line_changes.empty?))
+            if diff_mode
+              report[param][vers]['added'][file].set_header file
+              report[param][vers]['added'][file] << line_changes.split("\n")
+            else
+              report[param][vers]['added'] << "#{file} #{line_changes}"
+            end
           end
 
           changes.each do |change|

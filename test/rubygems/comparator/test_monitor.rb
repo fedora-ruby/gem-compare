@@ -14,6 +14,23 @@ class TestMonitor < TestGemModule
     assert_equal '++++', Gem::Comparator::Monitor.compact_files_diff(file1, file2)
   end
 
+  def test_files_added_diff
+    file1 = nil
+    file2 = File.join(@v003, 'lib/lorem/utils.rb')
+    diff = Gem::Comparator::Monitor.files_diff(file1, file2)
+    expected_diff = <<~EOF
+      @@ -0,0 +1,7 @@
+      +def check_something
+      +
+      +end
+      +
+      +def make_something
+      +
+      +end
+    EOF
+    assert_equal expected_diff, diff.split(/\n/, 3)[2]
+  end
+
   def test_files_diff
     file1 = File.join(@v001, 'lib/lorem.rb')
     file2 = File.join(@v002, 'lib/lorem.rb')
