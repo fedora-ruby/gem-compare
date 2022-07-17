@@ -15,7 +15,7 @@ class Gem::Comparator
 
   class FileListComparator < Gem::Comparator::Base
 
-    def initialize
+    def initialize(ignore_group_writable=true)
       expect(:packages)
 
       # We need diff
@@ -24,6 +24,8 @@ class Gem::Comparator
       rescue Exception
         error('Calling `diff` command failed. Do you have it installed?')
       end
+
+      @ignore_group_writable = ignore_group_writable
     end
 
     ##
@@ -137,7 +139,7 @@ class Gem::Comparator
             Monitor.lines_changed(nil, added_file)
           end
 
-          changes = Monitor.new_file_permissions(added_file),
+          changes = Monitor.new_file_permissions(added_file, @ignore_group_writable),
                     Monitor.new_file_executability(added_file),
                     Monitor.new_file_shebang(added_file)
 
@@ -170,7 +172,7 @@ class Gem::Comparator
             Monitor.lines_changed(prev_file, curr_file)
           end
 
-          changes = Monitor.files_permissions_changes(prev_file, curr_file),
+          changes = Monitor.files_permissions_changes(prev_file, curr_file, @ignore_group_writable),
                     Monitor.files_executability_changes(prev_file, curr_file),
                     Monitor.files_shebang_changes(prev_file, curr_file)
 

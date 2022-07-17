@@ -26,13 +26,6 @@ class TestDirUtils < TestGemModule
     assert_equal false, Gem::Comparator::DirUtils.files_same_first_line?(file1, file3)
   end
 
-  def test_file_permissions
-    file1 = File.join(@v001, 'lib/lorem.rb')
-    file2 = File.join(@v004, 'bin/lorem')
-    assert_equal '100664', Gem::Comparator::DirUtils.file_permissions(file1)
-    assert_equal '100775', Gem::Comparator::DirUtils.file_permissions(file2)
-  end
-
   def test_gem_bin_file
     file1 = File.join(@v001, 'lib/lorem.rb')
     file2 = File.join(@v004, 'bin/lorem')
