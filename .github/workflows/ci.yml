@@ -29,7 +29,7 @@ jobs:
           - { os: ubuntu-20.04 , ruby: jruby, allow-failure: true }
           - { os: ubuntu-20.04 , ruby: jruby-head }
           - { os: ubuntu-20.04 , ruby: truffleruby }
-          - { os: ubuntu-20.04 , ruby: truffleruby-head }
+          - { os: ubuntu-20.04 , ruby: truffleruby-head, allow-failure: true }
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
