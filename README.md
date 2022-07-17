@@ -1,6 +1,6 @@
 # gem-compare
 
-*gem-compare* is a RubyGems plugin that compares different versions of the specified gem. It can help you to track changes in metadata through the time, see how dependencies were evolving and spot important changes in gem's files such as shebang or permissions modifications.
+gem-compare is a RubyGems plugin that compares different versions of the specified gem. It can help you to track changes in metadata through the time, see how dependencies were evolving and spot important changes in gem's files such as shebang or permissions modifications.
 
 This is especially handy for:
 
@@ -20,7 +20,7 @@ $ gem install gem-compare
 
 By default, `gem-compare` compares specified versions of the given gem and includes only changes in the final report. If it's supposed to compare file lists or Gemfiles it will need to download the gems, otherwise it just downloads the specs. If you want to keep the downloaded `.gem` files, use `-k` (as 'keep') option. If you want to see the full report use `-a` (as 'all') switch:
 
-```
+```bash
 $ gem compare rails 3.0.0 4.0.0 -k
 Compared versions: ["3.0.0", "4.0.0"]
   DIFFERENT date:
@@ -63,7 +63,7 @@ Compared versions: ["3.0.0", "4.0.0"]
 
 You can also specify what you are interested in by using -p (as 'param') option:
 
-```
+```bash
 $ gem compare activesupport 4.0.0 4.1.0 -p 'runtime_dependency'
 Compared versions: ["4.0.0", "4.1.0"]
   DIFFERENT runtime dependencies:
@@ -79,7 +79,7 @@ Compared versions: ["4.0.0", "4.1.0"]
 ```
 There are also shortcuts for favourite options. Use `--runtime` for runtime dependencies, `--gemfiles` for comparing Gemfiles or `--files` for comparing file lists:
 
-```
+```bash
 $ gem compare rails 2.0.1 3.0.0 -k --files
 Compared versions: ["2.0.1", "3.0.0"]
   DIFFERENT files:
@@ -107,7 +107,7 @@ Compared versions: ["2.0.1", "3.0.0"]
 
 If you would like to see all development dependencies for `prawn` since `0.1` version, let *gem-compare* expand the versions for you (`>=0.0` won't work as RubyGems asks for the latest spec only):
 
-```
+```bash
 $ gem compare prawn '>=0.1' -k -a --development
 Compared versions: ["0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2", "0.2.3", "0.3.0", "0.4.0", "0.4.1", "0.5.0.1", "0.5.1", "0.6.1", "0.6.2", "0.6.3", "0.7.1", "0.7.2", "0.8.4", "0.11.1", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.14.0", "0.15.0", "1.0.0", "1.1.0"]
   DIFFERENT development dependencies:
@@ -140,7 +140,8 @@ Compared versions: ["0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2", "0.2.3
 
 *gem-compare* supports querying different gem platforms via standard `--platform` option. To compare
 nokogiri gem on different platform run:
-```
+
+```bash
 $ gem compare nokogiri 1.5.6 1.6.1 -ak --platform java # for JRuby
 $ gem compare nokogiri 1.5.6 1.6.1 -ak --platform x86-mingw32 # on Windows
 ```
@@ -154,7 +155,8 @@ If you run your own gem source server, you can override the RubyGems.org default
 ### Supported options
 
 To see all possible options run:
-```
+
+```bash
 $ gem compare --help
 ```
 

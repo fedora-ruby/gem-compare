@@ -24,7 +24,7 @@ class Gem::Commands::CompareCommand < Gem::Command
     # Speficy the platform using --platform=PLATFORM
     add_platform_option
 
-    add_option('-pPARAM', '--param PARAM', 'Compare only a given paramater') do |param, options|
+    add_option('-pPARAM', '--param PARAM', 'Compare only a given gemspec parameter (like "version")') do |param, options|
       options[:param] = param
     end
 
