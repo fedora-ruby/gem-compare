@@ -47,7 +47,7 @@ class Gem::Comparator
       curr_permissions = File.stat(curr_file).mode
 
       diff = prev_permissions ^ curr_permissions
-      diff ^= 020 if ignore_group_writable
+      diff ^= 020 if diff != 0 && ignore_group_writable
 
       if diff != 0
         "  (!) New permissions: " +
@@ -59,13 +59,21 @@ class Gem::Comparator
 
     def self.new_file_permissions(file, ignore_group_writable=false)
       file_permissions = File.stat(file).mode
-      formatted_file_permissions = format_permissions(file_permissions)
 
-      file_permissions ^= 020 if ignore_group_writable
+      expected_permissions = if DirUtils.gem_bin_file?(file)
+        0100755
+      else
+        0100644
+      end
 
-      unless file_permissions == 0100644 || \
-          (DirUtils.gem_bin_file?(file) && file_permissions == 0100755)
-        return "  (!) Unexpected permissions: #{formatted_file_permissions}"
+      permissions_to_compare = if ignore_group_writable && file_permissions != expected_permissions
+        file_permissions ^ 020
+      else
+        file_permissions
+      end
+
+      unless permissions_to_compare == expected_permissions
+        return "  (!) Unexpected permissions: #{format_permissions(file_permissions)}"
       end
       ''
     end

@@ -11,6 +11,12 @@ def setup_file_permissions
   File.chmod(0775, File.join(gemfiles_path, 'lorem-0.0.4', 'bin', 'lorem'))
 end
 
+def temp_bin_file
+  bin_dir = File.join(Dir.mktmpdir, "bin")
+  Dir.mkdir(bin_dir)
+  Tempfile.new("", bin_dir)
+end
+
 class TestGemComparator < Minitest::Test
   def setup
     super
