@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Gem::Comparator
   class Report
     class Entry

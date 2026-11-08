@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'gemnasium/parser'
 require 'rubygems/comparator/base'
 

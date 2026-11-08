@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rainbow'
 require 'rubygems/comparator/utils'
 require 'rubygems/comparator/report'

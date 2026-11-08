@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'diffy'
 require 'rubygems/comparator/base'
 require 'rubygems/comparator/dir_utils'
@@ -15,7 +17,7 @@ class Gem::Comparator
 
     def self.compact_files_diff(prev_file, curr_file)
       prev_file = prev_file.nil? ? Tempfile.new.path : prev_file
-      changes = ''
+      changes = +''
       Diffy::Diff.new(
         prev_file, curr_file, :source => 'files', :context => 0
       ).each do |line|
@@ -29,7 +31,7 @@ class Gem::Comparator
 
     def self.files_diff(prev_file, curr_file)
       prev_file = prev_file.nil? ? Tempfile.new.path : prev_file
-      changes = ''
+      changes = +''
       Diffy::Diff.new(
         prev_file, curr_file, :source => 'files', :context => 0, :include_diff_info => true
       ).each do |line|

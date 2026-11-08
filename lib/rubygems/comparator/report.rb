@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems/comparator/report/entry'
 
 class Gem::Comparator

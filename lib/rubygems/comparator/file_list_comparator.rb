@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'diffy'
 require 'rubygems/comparator/base'
 require 'rubygems/comparator/dir_utils'

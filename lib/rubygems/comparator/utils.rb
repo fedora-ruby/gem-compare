@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rainbow'
 require 'rubygems'
 require 'rubygems/user_interaction'
