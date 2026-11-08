@@ -225,15 +225,14 @@ class Gem::Comparator
 
     def download_package(gem_name, version)
       spec, source = get_specification(gem_name, version)
-      gem_file = gem_file_name(gem_name, spec.version.to_s)
 
-      Dir.chdir @options[:output] do
+      gem_file_path = Dir.chdir @options[:output] do
         source.download spec
       end
 
-      package = Gem::Package.new File.join(@options[:output], gem_file)
+      package = Gem::Package.new(gem_file_path)
       use_package(package)
-      info "#{gem_file} downloaded."
+      info "#{gem_file_path} downloaded."
 
       package
     end
